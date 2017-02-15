@@ -1,0 +1,18 @@
+Yelp API
+
+Home
+43.6521210,-79.4498610
+
+https://api.yelp.com/v3/businesses/search
+latitude=43.6521210
+longitude=-79.4498610
+open_now=true
+categories=restaurants
+radius=1500
+
+https://api.yelp.com/v3/businesses/search?latitude=43.6521210&longitude=-79.4498610&open_now=true&categories=restaurants&radius=1500&sort_by=distance
+
+https://www.yelp.ca/developers/v3/manage_app?app_created=True
+https://www.yelp.ca/developers/documentation/v3/get_started
+https://www.yelp.com/developers/documentation/v3/all_category_list
+https://www.yelp.com/developers/documentation/v3/business_search
