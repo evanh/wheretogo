@@ -2,13 +2,31 @@ doctype html
 html
   head
     link(rel='stylesheet', href='/public/stylesheets/css/style.css')
+    link(rel="stylesheet", href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
+    link(rel="stylesheet", href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css")
 
     block head
 
   body
-    <h1>What do you feel like today?</h1>
+    header.navbar.navbar-default.navbar-fixed-top.header-footer(role='banner')
+        .navbar-header
+            button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-fig1-navbar-collapse', data-disabled='true')
+                span.sr-only Toggle navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+            a.logo-header.navbar-brand(href='#') What do you feel like today?
+
 
     div(id="root")
     block content
 
-    <h3>By Evan Hicks</h3>
+
+    header.navbar.navbar-default.navbar-fixed-bottom.header-footer(role='banner')
+        .navbar-header
+            button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-fig1-navbar-collapse', data-disabled='true')
+                span.sr-only Toggle navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+            p.navbar-text By Evan Hicks
