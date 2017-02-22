@@ -36897,7 +36897,7 @@
 	            var buttonText = this.props.firstAttempt ? "Get Started" : "Try Again?";
 	            return _react2.default.createElement(
 	                "div",
-	                null,
+	                { className: "centered" },
 	                _react2.default.createElement(
 	                    "button",
 	                    { onClick: this.props.onClick },
