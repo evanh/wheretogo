@@ -8,8 +8,8 @@ const yelpAPI = 'https://api.yelp.com';
 
 function getAPIKey() {
     return Promise.coroutine(function *g() {
-        const apiKey = 'BHmyv9NdA24zpB72GlsySw';// process.env.YELP_API_KEY;
-        const apiSecret = 'SwozyQZADOFkf820NBlXz7YAdfW58RHdvQrxvJh08CAynRkxoXxW9YgWiHyvv8JJ';//process.env.YELP_API_SECRET;
+        const apiKey = process.env.YELP_API_KEY;
+        const apiSecret = process.env.YELP_API_SECRET;
 
         const body = {
             grant_type: 'client_credentials',
