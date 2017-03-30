@@ -1,35 +1,60 @@
 {
     "env": {
-        "browser": true,
+        "node": true,
+        "mocha": true,
         "es6": true
     },
-    "extends": "eslint:recommended",
+    "extends": ["plugin:react/recommended"],
     "parserOptions": {
+        "ecmaVersion": 6,
         "ecmaFeatures": {
-            "experimentalObjectRestSpread": true,
-            "jsx": true
+            "blockBindings": true,
+            "generators": true,
+            "arrowFunctions": true,
+            "destructuring": true,
+            "defaultParams": true,
+            "restParams": true,
+            "spread": true,
+            "templateStrings": true,
+            "modules": true,
+            "arrow-body-style": true,
+            "jsx": true,
+            "objectLiteralShorthandMethods": true
         },
         "sourceType": "module"
+    },
+    "settings": {
+        "react": {
+            "createClass": "createClass", // Regex for Component Factory to use, default to "createClass"
+            "pragma": "React",  // Pragma to use, default to "React"
+            "version": "15.0" // React version, default to the latest React stable release
+        }
     },
     "plugins": [
         "react"
     ],
     "rules": {
-        "indent": [
-            "error",
-            4
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "double"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ]
+        "curly": 2,
+        "semi": 1,
+        "eqeqeq": [1, "smart"],
+        "no-eval": 2,
+        "no-unused-vars": 1,
+        "no-use-before-define": [1, "nofunc"],
+        "quotes": [1, "single", "avoid-escape"],
+        "no-undef": 1,
+        "global-require": 0,
+        "no-mixed-spaces-and-tabs": 2,
+        "no-trailing-spaces": [2, { "skipBlankLines": true }],
+        "arrow-parens": [1, "as-needed"],
+        "keyword-spacing": [1, {"before": true, "after": true}]
+    },
+    "globals": {
+        "console": true,
+        "$": true,
+        "_": true,
+        "window": true,
+        "document": true,
+        "ga": true,
+        "Ember": true
     }
 }

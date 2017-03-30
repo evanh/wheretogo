@@ -1,0 +1,10 @@
+.restaurant {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+    &__image {
+        width: 300px;
+    }
+}

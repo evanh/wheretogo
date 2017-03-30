@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export default class StartButton extends React.Component {
     constructor(props){
@@ -6,9 +6,9 @@ export default class StartButton extends React.Component {
     }
 
     render() {
-        const buttonText = this.props.firstAttempt ? "Get Started" : "Try Again?";
+        const buttonText = this.props.firstAttempt ? 'Get Started' : 'Try Again?';
         return (
-            <div className="centered">
+            <div className='centered'>
                 <button onClick={this.props.onClick}>{buttonText}</button>
             </div>
         );

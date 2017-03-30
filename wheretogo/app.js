@@ -2,14 +2,14 @@
 
 const express = require('express');
 const path = require('path');
-const favicon = require('serve-favicon');
+// const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const lessMiddleware = require("less-middleware");
+// const lessMiddleware = require("less-middleware");
 
 const index = require('./routes/index');
-const users = require('./routes/users');
+const restaurantHandler = require("./lib/restaurantHandler");
 
 const app = express();
 
@@ -23,11 +23,11 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use("/public/stylesheets/css", lessMiddleware(__dirname + '/public/stylesheets/less', { dest: path.join(__dirname, '/public/stylesheets/css')}));
 app.use("/public", express.static(path.join(__dirname, "/public")));
 
 app.use('/', index);
-app.use('/users', users);
+
+app.get("/restaurants", restaurantHandler.getRestaurantsInRadius);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
