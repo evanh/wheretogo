@@ -4,6 +4,10 @@ export default class RestaurantComponent extends React.Component {
     constructor(props){
         super(props);
 
+        props.restaurants.forEach(r => {
+            r.walkingMinutes = (60.0 / 5000.0) * r.distance;
+        });
+
         this.state = {
             topCategory: null,
             currentRestaurant: props.restaurants[0],
@@ -13,6 +17,7 @@ export default class RestaurantComponent extends React.Component {
         this.restaurantSelected = this.restaurantSelected.bind(this);
         this.restaurantRejected = this.restaurantRejected.bind(this);
         this.categoryRejected = this.categoryRejected.bind(this);
+        this.distanceRejected = this.distanceRejected.bind(this);
     }
 
     restaurantSelected() {
@@ -35,6 +40,12 @@ export default class RestaurantComponent extends React.Component {
             }
             return true;
         });
+        this.props.categoryRejected(category);
+    }
+
+    distanceRejected(restaurant) {
+        this.restaurantFilter(r => restaurant.distance > r.distance);
+        this.props.distanceRejected(restaurant.distance);
     }
 
     restaurantFilter(filterFn) {
@@ -57,7 +68,14 @@ export default class RestaurantComponent extends React.Component {
                 <img
                     src={this.state.currentRestaurant.image_url}
                     className="restaurant__image" />
-                <button onClick={this.props.restaurantSelected}>Yes Please</button>
+                <button
+                    onClick={this.props.restaurantSelected.bind(null, this.state.currentRestaurant)}>
+                    Yes Please
+                </button>
+                <button
+                    onClick={this.distanceRejected.bind(null, this.state.currentRestaurant)}>
+                    I don't feel like walking for {this.state.currentRestaurant.walkingMinutes.toFixed(1)} minutes today
+                </button>
                 <button onClick={this.restaurantRejected.bind(null, this.state.currentRestaurant)}>
                     I don't feel like this place today
                 </button>
@@ -78,4 +96,6 @@ RestaurantComponent.propTypes = {
     restaurants: React.PropTypes.array,
     restaurantSelected: React.PropTypes.func,
     noValidRestaurants: React.PropTypes.func,
+    categoryRejected: React.PropTypes.func,
+    distanceRejected: React.PropTypes.func,
 };

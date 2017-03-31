@@ -30922,6 +30922,10 @@
 	
 	var _restaurantComponent2 = _interopRequireDefault(_restaurantComponent);
 	
+	var _selectedRestaurantComponent = __webpack_require__(/*! selectedRestaurantComponent.jsx */ 530);
+	
+	var _selectedRestaurantComponent2 = _interopRequireDefault(_selectedRestaurantComponent);
+	
 	__webpack_require__(/*! restaurant.scss */ 528);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -30943,16 +30947,21 @@
 	        _this.state = {
 	            status: 'not_started',
 	            restaurants: [],
+	            SelectedRestaurant: {},
 	            offset: 0,
 	            latitude: '',
 	            longitude: '',
-	            location: ''
+	            location: '',
+	            rejectedCategories: [],
+	            rejectedDistance: 2000
 	        };
 	
 	        _this.restaurantSelected = _this.restaurantSelected.bind(_this);
 	        _this.getStarted = _this.getStarted.bind(_this);
 	        _this.setCurrentLocation = _this.setCurrentLocation.bind(_this);
 	        _this.noMoreOptions = _this.noMoreOptions.bind(_this);
+	        _this.addRejectedCategory = _this.addRejectedCategory.bind(_this);
+	        _this.addRejectedDistance = _this.addRejectedDistance.bind(_this);
 	        return _this;
 	    }
 	
@@ -30973,8 +30982,28 @@
 	                    return;
 	                }
 	
+	                var filteredBusinesses = response.data.businesses.filter(function (b) {
+	                    for (var i = 0; i < b.categories.length; i++) {
+	                        for (var c = 0; c < _this2.state.rejectedCategories.length; c++) {
+	                            if (b.categories[i].alias === _this2.state.rejectedCategories[c]) {
+	                                return false;
+	                            }
+	                        }
+	                    }
+	                    return b.distance < _this2.state.rejectedDistance;
+	                });
+	
+	                // Increment offset and try again
+	                if (filteredBusinesses.length === 0) {
+	                    return _this2.setState({
+	                        offset: _this2.state.offset + 50
+	                    }, function () {
+	                        return _this2.fetchRestaurants();
+	                    });
+	                }
+	
 	                _this2.setState({
-	                    restaurants: response.data.businesses,
+	                    restaurants: filteredBusinesses,
 	                    status: 'in_use',
 	                    offset: _this2.state.offset + 50
 	                });
@@ -30985,8 +31014,11 @@
 	        }
 	    }, {
 	        key: 'restaurantSelected',
-	        value: function restaurantSelected() {
-	            // Use nextRestaurant to celebrate
+	        value: function restaurantSelected(restaurant) {
+	            this.setState({
+	                status: 'selected',
+	                selectedRestaurant: restaurant
+	            });
 	        }
 	    }, {
 	        key: 'setCurrentLocation',
@@ -31032,6 +31064,20 @@
 	            this.setState({ status: 'fetching_restaurants' });
 	        }
 	    }, {
+	        key: 'addRejectedCategory',
+	        value: function addRejectedCategory(category) {
+	            this.setState({
+	                rejectedCategories: this.state.rejectedCategories.concat([category.alias])
+	            });
+	        }
+	    }, {
+	        key: 'addRejectedDistance',
+	        value: function addRejectedDistance(distance) {
+	            this.setState({
+	                rejectedDistance: distance
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var component = void 0;
@@ -31046,16 +31092,23 @@
 	                case 'getting_location':
 	                case 'fetching_restaurants':
 	                    component = _react2.default.createElement(_reactSpinkit2.default, {
-	                        noFadeIn: 'true',
+	                        noFadeIn: true,
 	                        className: 'centered',
 	                        spinnerName: 'cube-grid' });
 	                    break;
 	                case 'in_use':
 	                    component = _react2.default.createElement(_restaurantComponent2.default, {
 	                        restaurants: this.state.restaurants,
-	                        restaurantSelected: this.restaurantFound,
-	                        noValidRestaurants: this.noMoreOptions
+	                        restaurantSelected: this.restaurantSelected,
+	                        noValidRestaurants: this.noMoreOptions,
+	                        categoryRejected: this.addRejectedCategory,
+	                        distanceRejected: this.addRejectedDistance
 	                    });
+	                    break;
+	                case 'selected':
+	                    component = _react2.default.createElement(_selectedRestaurantComponent2.default, {
+	                        restaurant: this.state.selectedRestaurant,
+	                        startAgain: this.state.getStarted });
 	                    break;
 	            }
 	
@@ -33841,6 +33894,10 @@
 	
 	        var _this = _possibleConstructorReturn(this, (RestaurantComponent.__proto__ || Object.getPrototypeOf(RestaurantComponent)).call(this, props));
 	
+	        props.restaurants.forEach(function (r) {
+	            r.walkingMinutes = 60.0 / 5000.0 * r.distance;
+	        });
+	
 	        _this.state = {
 	            topCategory: null,
 	            currentRestaurant: props.restaurants[0],
@@ -33850,6 +33907,7 @@
 	        _this.restaurantSelected = _this.restaurantSelected.bind(_this);
 	        _this.restaurantRejected = _this.restaurantRejected.bind(_this);
 	        _this.categoryRejected = _this.categoryRejected.bind(_this);
+	        _this.distanceRejected = _this.distanceRejected.bind(_this);
 	        return _this;
 	    }
 	
@@ -33877,6 +33935,15 @@
 	                }
 	                return true;
 	            });
+	            this.props.categoryRejected(category);
+	        }
+	    }, {
+	        key: "distanceRejected",
+	        value: function distanceRejected(restaurant) {
+	            this.restaurantFilter(function (r) {
+	                return restaurant.distance > r.distance;
+	            });
+	            this.props.distanceRejected(restaurant.distance);
 	        }
 	    }, {
 	        key: "restaurantFilter",
@@ -33910,8 +33977,17 @@
 	                    className: "restaurant__image" }),
 	                _react2.default.createElement(
 	                    "button",
-	                    { onClick: this.props.restaurantSelected },
+	                    {
+	                        onClick: this.props.restaurantSelected.bind(null, this.state.currentRestaurant) },
 	                    "Yes Please"
+	                ),
+	                _react2.default.createElement(
+	                    "button",
+	                    {
+	                        onClick: this.distanceRejected.bind(null, this.state.currentRestaurant) },
+	                    "I don't feel like walking for ",
+	                    this.state.currentRestaurant.walkingMinutes.toFixed(1),
+	                    " minutes today"
 	                ),
 	                _react2.default.createElement(
 	                    "button",
@@ -33942,7 +34018,9 @@
 	RestaurantComponent.propTypes = {
 	    restaurants: _react2.default.PropTypes.array,
 	    restaurantSelected: _react2.default.PropTypes.func,
-	    noValidRestaurants: _react2.default.PropTypes.func
+	    noValidRestaurants: _react2.default.PropTypes.func,
+	    categoryRejected: _react2.default.PropTypes.func,
+	    distanceRejected: _react2.default.PropTypes.func
 	};
 
 /***/ },
@@ -33990,6 +34068,77 @@
 	
 	// exports
 
+
+/***/ },
+/* 530 */
+/*!*****************************************!*\
+  !*** ./selectedRestaurantComponent.jsx ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var SelectedRestaurantComponent = function (_React$Component) {
+	    _inherits(SelectedRestaurantComponent, _React$Component);
+	
+	    function SelectedRestaurantComponent() {
+	        _classCallCheck(this, SelectedRestaurantComponent);
+	
+	        return _possibleConstructorReturn(this, (SelectedRestaurantComponent.__proto__ || Object.getPrototypeOf(SelectedRestaurantComponent)).apply(this, arguments));
+	    }
+	
+	    _createClass(SelectedRestaurantComponent, [{
+	        key: "render",
+	        value: function render() {
+	            var restaurant = this.props.restaurant;
+	            return _react2.default.createElement(
+	                "div",
+	                null,
+	                _react2.default.createElement(
+	                    "span",
+	                    null,
+	                    restaurant.name
+	                ),
+	                _react2.default.createElement("img", {
+	                    src: restaurant.image_url,
+	                    className: "restaurant__image" }),
+	                _react2.default.createElement(
+	                    "button",
+	                    { onClick: this.props.startAgain },
+	                    "Start Again"
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return SelectedRestaurantComponent;
+	}(_react2.default.Component);
+	
+	exports.default = SelectedRestaurantComponent;
+	
+	
+	SelectedRestaurantComponent.propTypes = {
+	    restaurant: _react2.default.PropTypes.object,
+	    startAgain: _react2.default.PropTypes.func
+	};
 
 /***/ }
 /******/ ]);

@@ -4,6 +4,7 @@ import Spinner from 'react-spinkit';
 
 import StartButton from 'startButton.jsx';
 import RestaurantComponent from 'restaurantComponent.jsx';
+import SelectedRestaurant from 'selectedRestaurantComponent.jsx';
 
 import 'restaurant.scss';
 
@@ -14,16 +15,21 @@ export default class Main extends React.Component {
         this.state = {
             status: 'not_started',
             restaurants: [],
+            SelectedRestaurant: {},
             offset: 0,
             latitude: '',
             longitude: '',
             location: '',
+            rejectedCategories: [],
+            rejectedDistance: 2000,
         };
 
         this.restaurantSelected = this.restaurantSelected.bind(this);
         this.getStarted = this.getStarted.bind(this);
         this.setCurrentLocation = this.setCurrentLocation.bind(this);
         this.noMoreOptions = this.noMoreOptions.bind(this);
+        this.addRejectedCategory = this.addRejectedCategory.bind(this);
+        this.addRejectedDistance = this.addRejectedDistance.bind(this);
     }
 
     fetchRestaurants() {
@@ -39,8 +45,28 @@ export default class Main extends React.Component {
                 return;
             }
 
+            const filteredBusinesses = response.data.businesses.filter(b => {
+                for (let i = 0; i < b.categories.length; i++) {
+                    for (let c = 0; c < this.state.rejectedCategories.length; c++) {
+                        if (b.categories[i].alias === this.state.rejectedCategories[c]) {
+                            return false;
+                        }
+                    }
+                }
+                return b.distance < this.state.rejectedDistance;
+            });
+
+            // Increment offset and try again
+            if (filteredBusinesses.length === 0) {
+                return this.setState({
+                    offset: this.state.offset + 50,
+                }, () => {
+                    return this.fetchRestaurants();
+                });
+            }
+
             this.setState({
-                restaurants: response.data.businesses,
+                restaurants: filteredBusinesses,
                 status: 'in_use',
                 offset: this.state.offset + 50,
             });
@@ -50,8 +76,11 @@ export default class Main extends React.Component {
         });
     }
 
-    restaurantSelected() {
-        // Use nextRestaurant to celebrate
+    restaurantSelected(restaurant) {
+        this.setState({
+            status: 'selected',
+            selectedRestaurant: restaurant,
+        });
     }
 
     setCurrentLocation(position, callback) {
@@ -93,6 +122,18 @@ export default class Main extends React.Component {
         this.setState({status: 'fetching_restaurants'});
     }
 
+    addRejectedCategory(category) {
+        this.setState({
+            rejectedCategories: this.state.rejectedCategories.concat([category.alias]),
+        });
+    }
+
+    addRejectedDistance(distance) {
+        this.setState({
+            rejectedDistance: distance,
+        });
+    }
+
     render() {
         let component;
         switch (this.state.status) {
@@ -106,16 +147,23 @@ export default class Main extends React.Component {
             case 'getting_location':
             case 'fetching_restaurants':
                 component = <Spinner
-                    noFadeIn="true"
+                    noFadeIn={true}
                     className="centered"
                     spinnerName='cube-grid' />;
                 break;
             case 'in_use':
                 component = <RestaurantComponent
                     restaurants={this.state.restaurants}
-                    restaurantSelected={this.restaurantFound}
+                    restaurantSelected={this.restaurantSelected}
                     noValidRestaurants={this.noMoreOptions}
+                    categoryRejected={this.addRejectedCategory}
+                    distanceRejected={this.addRejectedDistance}
                 />;
+                break;
+            case 'selected':
+                component = <SelectedRestaurant
+                    restaurant={this.state.selectedRestaurant}
+                    startAgain={this.state.getStarted} />;
                 break;
         }
 
