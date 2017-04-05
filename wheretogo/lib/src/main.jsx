@@ -148,7 +148,7 @@ export default class Main extends React.Component {
             case 'fetching_restaurants':
                 component = <Spinner
                     noFadeIn={true}
-                    className="centered"
+                    className="centered spinner"
                     spinnerName='cube-grid' />;
                 break;
             case 'in_use':

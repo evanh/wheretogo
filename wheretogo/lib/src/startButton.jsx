@@ -9,7 +9,7 @@ export default class StartButton extends React.Component {
         const buttonText = this.props.firstAttempt ? 'Get Started' : 'Try Again?';
         return (
             <div className='centered'>
-                <button onClick={this.props.onClick}>{buttonText}</button>
+                <button className="started__button" onClick={this.props.onClick}>{buttonText}</button>
             </div>
         );
     }

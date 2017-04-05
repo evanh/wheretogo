@@ -30922,11 +30922,11 @@
 	
 	var _restaurantComponent2 = _interopRequireDefault(_restaurantComponent);
 	
-	var _selectedRestaurantComponent = __webpack_require__(/*! selectedRestaurantComponent.jsx */ 530);
+	var _selectedRestaurantComponent = __webpack_require__(/*! selectedRestaurantComponent.jsx */ 528);
 	
 	var _selectedRestaurantComponent2 = _interopRequireDefault(_selectedRestaurantComponent);
 	
-	__webpack_require__(/*! restaurant.scss */ 528);
+	__webpack_require__(/*! restaurant.scss */ 529);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -31093,7 +31093,7 @@
 	                case 'fetching_restaurants':
 	                    component = _react2.default.createElement(_reactSpinkit2.default, {
 	                        noFadeIn: true,
-	                        className: 'centered',
+	                        className: 'centered spinner',
 	                        spinnerName: 'cube-grid' });
 	                    break;
 	                case 'in_use':
@@ -33838,7 +33838,7 @@
 	                { className: 'centered' },
 	                _react2.default.createElement(
 	                    'button',
-	                    { onClick: this.props.onClick },
+	                    { className: 'started__button', onClick: this.props.onClick },
 	                    buttonText
 	                )
 	            );
@@ -34025,52 +34025,6 @@
 
 /***/ },
 /* 528 */
-/*!*************************!*\
-  !*** ./restaurant.scss ***!
-  \*************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(/*! !./../~/css-loader!./../~/sass-loader/lib/loader.js!./restaurant.scss */ 529);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../~/style-loader/addStyles.js */ 505)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/lib/loader.js!./restaurant.scss", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/lib/loader.js!./restaurant.scss");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 529 */
-/*!************************************************************************!*\
-  !*** ../~/css-loader!../~/sass-loader/lib/loader.js!./restaurant.scss ***!
-  \************************************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(/*! ./../~/css-loader/lib/css-base.js */ 504)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, ".restaurant {\n  display: flex;\n  flex-flow: column nowrap;\n  justify-content: center;\n  align-items: center; }\n  .restaurant__image {\n    width: 300px; }\n", ""]);
-	
-	// exports
-
-
-/***/ },
-/* 530 */
 /*!*****************************************!*\
   !*** ./selectedRestaurantComponent.jsx ***!
   \*****************************************/
@@ -34139,6 +34093,52 @@
 	    restaurant: _react2.default.PropTypes.object,
 	    startAgain: _react2.default.PropTypes.func
 	};
+
+/***/ },
+/* 529 */
+/*!*************************!*\
+  !*** ./restaurant.scss ***!
+  \*************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(/*! !./../~/css-loader!./../~/sass-loader/lib/loader.js!./restaurant.scss */ 530);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(/*! ./../~/style-loader/addStyles.js */ 505)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/lib/loader.js!./restaurant.scss", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/lib/loader.js!./restaurant.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 530 */
+/*!************************************************************************!*\
+  !*** ../~/css-loader!../~/sass-loader/lib/loader.js!./restaurant.scss ***!
+  \************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(/*! ./../~/css-loader/lib/css-base.js */ 504)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".restaurant {\n  display: flex;\n  flex-flow: column nowrap;\n  justify-content: center;\n  align-items: center; }\n  .restaurant__image {\n    width: 300px; }\n\n.spinner {\n  width: 54px;\n  height: 54px; }\n\n.sk-cube {\n  background: #6b9ff9; }\n\n.started__button {\n  font-family: 'Helvetica Neue', Helvetica, sans-serif;\n  font-size: 2em;\n  background: #6b9ff9 none;\n  color: rgba(0, 0, 0, 0.6);\n  padding: .78571429em 1.5em .78571429em;\n  font-weight: 700;\n  line-height: 1em;\n  font-style: normal;\n  text-align: center;\n  border-radius: 0.5em;\n  border-width: 0em;\n  box-shadow: 0 0 0 1px transparent inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset; }\n  .started__button:hover {\n    background: #5d8ad8 none; }\n", ""]);
+	
+	// exports
+
 
 /***/ }
 /******/ ]);

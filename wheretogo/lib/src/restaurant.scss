@@ -8,3 +8,34 @@
         width: 300px;
     }
 }
+
+.spinner {
+    width: 54px;
+    height: 54px;
+}
+
+.sk-cube {
+    background: #6b9ff9;
+}
+
+.started {
+    &__button {
+        // font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+        font-family: 'Helvetica Neue', Helvetica, sans-serif;
+        font-size: 2em;
+        background: #6b9ff9 none;
+        color: rgba(0,0,0,.6);
+        padding: .78571429em 1.5em .78571429em;
+        font-weight: 700;
+        line-height: 1em;
+        font-style: normal;
+        text-align: center;
+        border-radius: 0.5em;
+        border-width: 0em;
+        // transition: opacity .1s ease,background-color .1s ease,color .1s ease,box-shadow .1s ease,background .1s ease;
+        box-shadow: 0 0 0 1px transparent inset, 0 0 0 0 rgba(34,36,38,.15) inset;
+        &:hover {
+            background: #5d8ad8 none;
+        }
+    }
+}
