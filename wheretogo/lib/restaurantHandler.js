@@ -6,6 +6,8 @@ const querystring = require('querystring');
 
 const yelpAPI = 'https://api.yelp.com';
 
+let ACCESS_DATA;
+
 function getAPIKey() {
     return Promise.coroutine(function *g() {
         const apiKey = process.env.YELP_API_KEY;
@@ -19,18 +21,30 @@ function getAPIKey() {
 
         const response = yield axios.post(
             `${yelpAPI}/oauth2/token`, querystring.stringify(body));
-        return response.data.access_token;
+        response.data.generated = new Date().getTime();
+        ACCESS_DATA = response.data;
     })();
+}
+
+getAPIKey();
+
+function checkToken() {
+    const now = new Date().getTime();
+    if (now > (ACCESS_DATA.generated + ACCESS_DATA.expires_in)) {
+        return getAPIKey();
+    }
+    return Promise.resolve();
 }
 
 function getRestaurantsInRadius(req, res, next) {
     return Promise.coroutine(function *g() {
-        const accessToken = yield getAPIKey();
+        yield checkToken();
 
         const qs = {
             radius: 2000,
             categories: 'restaurants',
             limit: 50,
+            open_now: true,
         };
         if (req.query.latitude !== '' && req.query.longitude !== '') {
             qs.latitude = req.query.latitude;
@@ -49,7 +63,7 @@ function getRestaurantsInRadius(req, res, next) {
             json: true,
             params: qs,
             headers: {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${ACCESS_DATA.access_token}`,
             },
         };
 

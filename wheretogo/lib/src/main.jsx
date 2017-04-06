@@ -1,6 +1,7 @@
 import React from 'react';
 import {get} from 'axios';
 import Spinner from 'react-spinkit';
+import shuffle from 'lodash/shuffle';
 
 import StartButton from 'startButton.jsx';
 import RestaurantComponent from 'restaurantComponent.jsx';
@@ -66,7 +67,7 @@ export default class Main extends React.Component {
             }
 
             this.setState({
-                restaurants: filteredBusinesses,
+                restaurants: shuffle(filteredBusinesses),
                 status: 'in_use',
                 offset: this.state.offset + 50,
             });

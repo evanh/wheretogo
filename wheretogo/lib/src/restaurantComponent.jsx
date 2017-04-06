@@ -63,30 +63,40 @@ export default class RestaurantComponent extends React.Component {
 
     render() {
         return (
-            <div className="restaurant">
-                <span>{this.state.currentRestaurant.name}</span>
-                <img
-                    src={this.state.currentRestaurant.image_url}
-                    className="restaurant__image" />
-                <button
-                    onClick={this.props.restaurantSelected.bind(null, this.state.currentRestaurant)}>
-                    Yes Please
-                </button>
-                <button
-                    onClick={this.distanceRejected.bind(null, this.state.currentRestaurant)}>
-                    I don't feel like walking for {this.state.currentRestaurant.walkingMinutes.toFixed(1)} minutes today
-                </button>
-                <button onClick={this.restaurantRejected.bind(null, this.state.currentRestaurant)}>
-                    I don't feel like this place today
-                </button>
-                {this.state.currentRestaurant.categories.map(c => {
-                    return <button
-                        key={c.alias}
-                        onClick={this.categoryRejected.bind(null, c)}>
-                        I don't feel like {c.title} today
-                    </button>;
-                })}
-
+            <div className="restaurant column-flex">
+                <div className="restaurant__container column-flex">
+                    <div>
+                        <img
+                            className="restaurant__image"
+                            src={this.state.currentRestaurant.image_url} />
+                    </div>
+                    <h2 className="restaurant__name">{this.state.currentRestaurant.name}?</h2>
+                    <hr className="restaurant__divider" />
+                    <button
+                        className="restaurant__button"
+                        onClick={this.props.restaurantSelected.bind(null, this.state.currentRestaurant)}>
+                        Yes Please!
+                    </button>
+                    <hr className="restaurant__divider" />
+                    <button
+                        className="restaurant__button"
+                        onClick={this.restaurantRejected.bind(null, this.state.currentRestaurant)}>
+                        Not this place today
+                    </button>
+                    <button
+                        className="restaurant__button"
+                        onClick={this.distanceRejected.bind(null, this.state.currentRestaurant)}>
+                        {this.state.currentRestaurant.walkingMinutes.toFixed(1)} minutes is too far
+                    </button>
+                    {this.state.currentRestaurant.categories.map(c => {
+                        return <button
+                            key={c.alias}
+                            className="restaurant__button"
+                            onClick={this.categoryRejected.bind(null, c)}>
+                            No {c.title} today
+                        </button>;
+                    })}
+                </div>
             </div>
         );
     }
