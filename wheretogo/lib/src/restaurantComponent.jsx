@@ -20,6 +20,22 @@ export default class RestaurantComponent extends React.Component {
         this.distanceRejected = this.distanceRejected.bind(this);
     }
 
+    componentDidMount() {
+        const $img = $('#yelp-image');
+        $img.on('load', function() {
+            // Reset height and width so it can be scaled correctly
+            $img.width($img.get(0).naturalWidth);
+            $img.height($img.get(0).naturalHeight);
+            if ($img.width() < $img.height()) {
+                $img.width(300);
+                $img.height(''); // These stay set from load to load, so need to unset them
+            } else {
+                $img.height(300);
+                $img.width('');
+            }
+        });
+    }
+
     restaurantSelected() {
         // maybe an animation or something
         this.props.restaurantSelected(this.state.currentRestaurant);
@@ -65,9 +81,10 @@ export default class RestaurantComponent extends React.Component {
         return (
             <div className="restaurant column-flex">
                 <div className="restaurant__container column-flex">
-                    <div>
+                    <div id="image-container" className="restaurant__img_container">
                         <img
-                            className="restaurant__image"
+                            id="yelp-image"
+                            className="relative-centered"
                             src={this.state.currentRestaurant.image_url} />
                     </div>
                     <h2 className="restaurant__name">{this.state.currentRestaurant.name}?</h2>

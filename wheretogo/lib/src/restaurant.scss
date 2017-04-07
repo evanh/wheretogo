@@ -31,13 +31,13 @@
         width: 100%;
     }
 
-    &__image {
+    &__img_container {
+        overflow: hidden;
         width: 300px;
         height: 300px;
-        object-fit: none;
-        object-position: center;
         margin: 0px 0px 5px 0px;
         border-radius: 8px;
+        position: relative;
     }
 
     &__button {
@@ -57,6 +57,9 @@
         &:hover {
             background: #5d8ad8 none;
         }
+        &:focus {
+            outline: none;
+        }
     }
 }
 
@@ -67,6 +70,13 @@
 
 .sk-cube {
     background: #6b9ff9;
+}
+
+.relative-centered {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    -webkit-transform: translateY(-50%) translateX(-50%);
 }
 
 .started {
