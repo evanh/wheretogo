@@ -44,7 +44,7 @@ function getRestaurantsInRadius(req, res, next) {
             radius: 2000,
             categories: 'restaurants',
             limit: 50,
-            // open_now: true,
+            open_now: true,
         };
         if (req.query.latitude !== '' && req.query.longitude !== '') {
             qs.latitude = req.query.latitude;

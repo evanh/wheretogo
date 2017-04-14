@@ -1,19 +1,17 @@
 import React from 'react';
+import {TransitionMotion, spring} from 'react-motion';
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 
 export default class StartButton extends React.Component {
     constructor(props){
         super(props);
     }
 
-    componentWillLeave(callback) {
-        setTimeout(callback, 4000);
-    }
-
     render() {
         const buttonText = this.props.firstAttempt ? 'What do I feel like today?' : 'Try Again?';
         return (
-            <div className='centered'>
-                <button className="action-button started__button" onClick={this.props.onClick}>{buttonText}</button>
+            <div className='centered start-button'>
+                <button key="button" className="action-button started__button" onClick={this.props.onClick}>{buttonText}</button>
             </div>
         );
     }
