@@ -1,0 +1,30 @@
+.spinner.animate-enter {
+    opacity: 0.01;
+}
+
+.spinner.animate-enter.animate-enter-active {
+    opacity: 1;
+    transition: opacity 5s ease-in;
+}
+
+.spinner.animate-leave {
+}
+
+.spinner.animate-leave.animate-leave-active {
+    opacity: 0.01;
+    transition: opacity 5s ease-out;
+}
+
+.start-button.animate-leave {
+    -webkit-transition: 5s ease-in-out;
+    -moz-transition: 5s ease-in-out;
+    -o-transition: 5s ease-in-out;
+    transition: 5s ease-in-out;
+    transition-property: width, height, opacity;
+}
+
+.start-button.animate-leave.animate-leave-active {
+    width: 54px;
+    height: 54px;
+    opacity: 0.01;
+}
