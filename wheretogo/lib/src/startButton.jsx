@@ -5,11 +5,15 @@ export default class StartButton extends React.Component {
         super(props);
     }
 
+    componentWillLeave(callback) {
+        setTimeout(callback, 4000);
+    }
+
     render() {
-        const buttonText = this.props.firstAttempt ? 'Get Started' : 'Try Again?';
+        const buttonText = this.props.firstAttempt ? 'What do I feel like today?' : 'Try Again?';
         return (
             <div className='centered'>
-                <button className="started__button" onClick={this.props.onClick}>{buttonText}</button>
+                <button className="action-button started__button" onClick={this.props.onClick}>{buttonText}</button>
             </div>
         );
     }
