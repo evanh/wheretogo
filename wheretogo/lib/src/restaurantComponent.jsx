@@ -24,12 +24,11 @@ export default class RestaurantComponent extends React.Component {
         const $img = $('#yelp-image');
         $img.on('load', function() {
             // Reset height and width so it can be scaled correctly
-            $img.width($img.get(0).naturalWidth);
-            $img.height($img.get(0).naturalHeight);
-            if ($img.width() < $img.height()) {
+            if (this.naturalWidth < this.naturalHeight) {
                 $img.width(300);
                 $img.height(''); // These stay set from load to load, so need to unset them
             } else {
+
                 $img.height(300);
                 $img.width('');
             }
