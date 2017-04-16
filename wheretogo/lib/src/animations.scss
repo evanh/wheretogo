@@ -5,8 +5,8 @@
     @include shadow(1);
     width: 54px;
     height: 54px;
-    animation-delay: 5s;
-    animation: spinner 0.3s infinite;
+    animation-delay: 150ms;
+    animation: spinner 1s infinite;
 }
 
 @keyframes spinner {
@@ -15,24 +15,33 @@
     }
 }
 
-.start-button.animate-leave.animate-leave-active {
+.start-button.default-leave {
     transform-origin: left top;
-    animation: shrink 5s 1;
-    animation-timing-function: cubic-bezier(0.4, 0.0, 1, 1);
+    animation: shrink 150ms 1;
+    animation-timing-function: ease-in-out;
 }
 
 @keyframes shrink {
+    10% {
+        color: #3849aa;
+        border-radius: 0px;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
     100% {
         transform: translate(-2%, -5%) scale(0.07, 0.27);
         z-index: -1;
-        border-radius: 100%
+        opacity: 0;
     }
 }
 
-.spinner.animate-enter {
+.spinner.default-enter {
     transform-origin: left top;
-    animation: grow 5s 1;
-    animation-timing-function: ease-in;
+    animation: grow 150ms 1;
+    animation-timing-function: ease-in-out;
 }
 
 @keyframes grow {
@@ -41,11 +50,47 @@
     }
 }
 
-.spinner.animate-leave {
+.spinner.default-leave {
+    @include shadow(1);
+    animation: grow-to-card 600ms 1;
+    animation-timing-function: ease-in-out;
 }
 
-.spinner.animate-leave.animate-leave-active {
-    opacity: 0.01;
-    transition: opacity 5s ease-out;
+@keyframes grow-to-card {
+    66% {
+        transform: translate(-27px, -123px) scale(5.55, 9.15);
+        border-radius: 2px;
+        background-color: #f8f8f8;
+        z-index: -1;
+    }
+    100% {
+        z-index: -1;
+        background-color: #f8f8f8;
+    }
 }
 
+.restaurant.default-enter {
+    animation: card-enter 600ms 1;
+}
+
+@keyframes card-enter {
+    0% {
+        opacity: 0;
+    }
+    66% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.restaurant.default-leave {
+    animation: card-offscreen 150ms 1;
+}
+
+@keyframes card-offscreen {
+    100% {
+        transform: translateX(-110%);
+    }
+}

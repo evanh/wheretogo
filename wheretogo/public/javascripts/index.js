@@ -31099,9 +31099,9 @@
 	            switch (this.state.status) {
 	                case 'not_started':
 	                case 'no_more_choices':
-	                    animation = 'spinner';
-	                    animationEnterTimeout = 5000;
-	                    animationLeaveTimeout = 5000;
+	                    animation = 'default';
+	                    animationEnterTimeout = 100;
+	                    animationLeaveTimeout = 100;
 	                    component = _react2.default.createElement(_startButton2.default, {
 	                        key: 'started',
 	                        firstAttempt: this.state.offset === 0,
@@ -31110,15 +31110,17 @@
 	                    break;
 	                case 'getting_location':
 	                case 'fetching_restaurants':
-	                    animation = 'spinner';
-	                    animationEnterTimeout = 5000;
-	                    animationLeaveTimeout = 5000;
+	                    animation = 'default';
+	                    animationEnterTimeout = 100;
+	                    animationLeaveTimeout = 100;
 	                    component = _react2.default.createElement(_spinner2.default, null);
 	                    break;
 	                case 'in_use':
-	                    animation = 'restaurant';
-	                    animationEnterTimeout = 5000;
-	                    animationLeaveTimeout = 5000;
+	                    // TODO: Need to track current restaurant so we can switch
+	                    // to a different animation for entry
+	                    animation = 'default';
+	                    animationEnterTimeout = 550;
+	                    animationLeaveTimeout = 550;
 	                    component = _react2.default.createElement(_restaurantComponent2.default, {
 	                        key: 'card',
 	                        restaurants: this.state.restaurants,
@@ -31145,7 +31147,7 @@
 	                _react2.default.createElement(
 	                    _CSSTransitionGroup2.default,
 	                    {
-	                        transitionName: 'animate',
+	                        transitionName: animation,
 	                        transitionEnterTimeout: animationEnterTimeout,
 	                        transitionLeaveTimeout: animationLeaveTimeout },
 	                    component
@@ -35644,7 +35646,7 @@
 	
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'restaurant column-flex' },
+	                { className: 'column-flex restaurant' },
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'restaurant__container column-flex' },
@@ -35829,7 +35831,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".spinner {\n  background: #3849aa;\n  color: #ffffff;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  width: 54px;\n  height: 54px;\n  animation-delay: 5s;\n  animation: spinner 0.3s infinite; }\n\n@keyframes spinner {\n  0% {\n    border-radius: 100%; } }\n\n.start-button.animate-leave.animate-leave-active {\n  transform-origin: left top;\n  animation: shrink 5s 1;\n  animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }\n\n@keyframes shrink {\n  100% {\n    transform: translate(-2%, -5%) scale(0.07, 0.27);\n    z-index: -1;\n    border-radius: 100%; } }\n\n.spinner.animate-enter {\n  transform-origin: left top;\n  animation: grow 5s 1;\n  animation-timing-function: ease-in; }\n\n@keyframes grow {\n  0% {\n    transform: scale(0.01, 0.1); } }\n\n.spinner.animate-leave.animate-leave-active {\n  opacity: 0.01;\n  transition: opacity 5s ease-out; }\n\n.column-flex {\n  flex-flow: column nowrap;\n  justify-content: center;\n  align-items: center;\n  display: flex; }\n\n.restaurant {\n  margin: 10px; }\n  .restaurant__container {\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n    width: 300px;\n    border-radius: 10px; }\n  .restaurant__name {\n    width: 100%;\n    margin: 0px;\n    text-align: center;\n    padding: 5px;\n    color: #252526; }\n  .restaurant__divider {\n    margin-top: 3px;\n    margin-bottom: 3px;\n    border: 2px;\n    border-top: 1px solid #979a9e;\n    background: #979a9e;\n    width: 100%; }\n  .restaurant__img_container {\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n    overflow: hidden;\n    width: 300px;\n    height: 300px;\n    margin: 0px 0px 5px 0px;\n    border-radius: 8px;\n    position: relative; }\n  .restaurant__button {\n    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);\n    background: #6e74dc;\n    color: #000000;\n    width: 95%;\n    margin: 3px;\n    border-radius: 0.5em;\n    border-width: 0.1em; }\n    .restaurant__button__yes {\n      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);\n      background: #00277a;\n      color: #ffffff; }\n      .restaurant__button__yes:hover {\n        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n    .restaurant__button:hover {\n      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n    .restaurant__button:focus {\n      outline: none; }\n\n.relative-centered {\n  top: 50%;\n  left: 50%;\n  position: absolute;\n  -webkit-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%); }\n\n.action-button {\n  transition: 0.15s ease-out;\n  font-family: 'Helvetica Neue', Helvetica, sans-serif;\n  padding: .78571429em 1.5em .78571429em;\n  line-height: 1em;\n  font-style: normal;\n  text-align: center;\n  border-radius: 0.5em;\n  border-width: 0em; }\n\n.started__button {\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  background: #3849aa;\n  color: #ffffff;\n  font-size: 2em;\n  font-weight: 700; }\n  .started__button:hover {\n    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23); }\n  .started__button:focus {\n    outline: none; }\n", ""]);
+	exports.push([module.id, ".spinner {\n  background: #3849aa;\n  color: #ffffff;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  width: 54px;\n  height: 54px;\n  animation-delay: 150ms;\n  animation: spinner 1s infinite; }\n\n@keyframes spinner {\n  0% {\n    border-radius: 100%; } }\n\n.start-button.default-leave {\n  transform-origin: left top;\n  animation: shrink 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes shrink {\n  10% {\n    color: #3849aa;\n    border-radius: 0px; }\n  80% {\n    opacity: 1; }\n  100% {\n    transform: translate(-2%, -5%) scale(0.07, 0.27);\n    z-index: -1;\n    opacity: 0; } }\n\n.spinner.default-enter {\n  transform-origin: left top;\n  animation: grow 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow {\n  0% {\n    transform: scale(0.01, 0.1); } }\n\n.spinner.default-leave {\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  animation: grow-to-card 600ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow-to-card {\n  66% {\n    transform: translate(-27px, -123px) scale(5.55, 9.15);\n    border-radius: 2px;\n    background-color: #f8f8f8;\n    z-index: -1; }\n  100% {\n    z-index: -1;\n    background-color: #f8f8f8; } }\n\n.restaurant.default-enter {\n  animation: card-enter 600ms 1; }\n\n@keyframes card-enter {\n  0% {\n    opacity: 0; }\n  66% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n.restaurant.default-leave {\n  animation: card-offscreen 150ms 1; }\n\n@keyframes card-offscreen {\n  100% {\n    transform: translateX(-110%); } }\n\n.column-flex {\n  flex-flow: column nowrap;\n  justify-content: center;\n  align-items: center;\n  display: flex; }\n\n.restaurant {\n  margin: 10px; }\n  .restaurant__container {\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n    width: 300px;\n    border-radius: 10px; }\n  .restaurant__name {\n    width: 100%;\n    margin: 0px;\n    text-align: center;\n    padding: 5px;\n    color: #252526; }\n  .restaurant__divider {\n    margin-top: 3px;\n    margin-bottom: 3px;\n    border: 2px;\n    border-top: 1px solid #979a9e;\n    background: #979a9e;\n    width: 100%; }\n  .restaurant__img_container {\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n    overflow: hidden;\n    width: 300px;\n    height: 300px;\n    margin: 0px 0px 5px 0px;\n    border-radius: 8px;\n    position: relative; }\n  .restaurant__button {\n    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);\n    background: #6e74dc;\n    color: #000000;\n    width: 95%;\n    margin: 3px;\n    border-radius: 0.5em;\n    border-width: 0.1em; }\n    .restaurant__button__yes {\n      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);\n      background: #00277a;\n      color: #ffffff; }\n      .restaurant__button__yes:hover {\n        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n    .restaurant__button:hover {\n      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n    .restaurant__button:focus {\n      outline: none; }\n\n.relative-centered {\n  top: 50%;\n  left: 50%;\n  position: absolute;\n  -webkit-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%); }\n\n.action-button {\n  transition: 0.15s ease-out;\n  font-family: 'Helvetica Neue', Helvetica, sans-serif;\n  padding: .78571429em 1.5em .78571429em;\n  line-height: 1em;\n  font-style: normal;\n  text-align: center;\n  border-radius: 0.5em;\n  border-width: 0em; }\n\n.started__button {\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  background: #3849aa;\n  color: #ffffff;\n  font-size: 2em;\n  font-weight: 700; }\n  .started__button:hover {\n    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23); }\n  .started__button:focus {\n    outline: none; }\n", ""]);
 	
 	// exports
 
@@ -35875,7 +35877,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".spinner {\n  background: #3849aa;\n  color: #ffffff;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  width: 54px;\n  height: 54px;\n  animation-delay: 5s;\n  animation: spinner 0.3s infinite; }\n\n@keyframes spinner {\n  0% {\n    border-radius: 100%; } }\n\n.start-button.animate-leave.animate-leave-active {\n  transform-origin: left top;\n  animation: shrink 5s 1;\n  animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }\n\n@keyframes shrink {\n  100% {\n    transform: translate(-2%, -5%) scale(0.07, 0.27);\n    z-index: -1;\n    border-radius: 100%; } }\n\n.spinner.animate-enter {\n  transform-origin: left top;\n  animation: grow 5s 1;\n  animation-timing-function: ease-in; }\n\n@keyframes grow {\n  0% {\n    transform: scale(0.01, 0.1); } }\n\n.spinner.animate-leave.animate-leave-active {\n  opacity: 0.01;\n  transition: opacity 5s ease-out; }\n", ""]);
+	exports.push([module.id, ".spinner {\n  background: #3849aa;\n  color: #ffffff;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  width: 54px;\n  height: 54px;\n  animation-delay: 150ms;\n  animation: spinner 1s infinite; }\n\n@keyframes spinner {\n  0% {\n    border-radius: 100%; } }\n\n.start-button.default-leave {\n  transform-origin: left top;\n  animation: shrink 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes shrink {\n  10% {\n    color: #3849aa;\n    border-radius: 0px; }\n  80% {\n    opacity: 1; }\n  100% {\n    transform: translate(-2%, -5%) scale(0.07, 0.27);\n    z-index: -1;\n    opacity: 0; } }\n\n.spinner.default-enter {\n  transform-origin: left top;\n  animation: grow 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow {\n  0% {\n    transform: scale(0.01, 0.1); } }\n\n.spinner.default-leave {\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  animation: grow-to-card 600ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow-to-card {\n  66% {\n    transform: translate(-27px, -123px) scale(5.55, 9.15);\n    border-radius: 2px;\n    background-color: #f8f8f8;\n    z-index: -1; }\n  100% {\n    z-index: -1;\n    background-color: #f8f8f8; } }\n\n.restaurant.default-enter {\n  animation: card-enter 600ms 1; }\n\n@keyframes card-enter {\n  0% {\n    opacity: 0; }\n  66% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n.restaurant.default-leave {\n  animation: card-offscreen 150ms 1; }\n\n@keyframes card-offscreen {\n  100% {\n    transform: translateX(-110%); } }\n", ""]);
 	
 	// exports
 

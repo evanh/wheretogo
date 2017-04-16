@@ -146,9 +146,9 @@ export default class Main extends React.Component {
         switch (this.state.status) {
             case 'not_started':
             case 'no_more_choices':
-                animation = 'spinner';
-                animationEnterTimeout = 5000;
-                animationLeaveTimeout = 5000;
+                animation = 'default';
+                animationEnterTimeout = 100;
+                animationLeaveTimeout = 100;
                 component = <StartButton
                     key="started"
                     firstAttempt={this.state.offset === 0}
@@ -157,15 +157,17 @@ export default class Main extends React.Component {
                 break;
             case 'getting_location':
             case 'fetching_restaurants':
-                animation = 'spinner';
-                animationEnterTimeout = 5000;
-                animationLeaveTimeout = 5000;
+                animation = 'default';
+                animationEnterTimeout = 100;
+                animationLeaveTimeout = 100;
                 component = <Spinner />
                 break;
             case 'in_use':
-                animation = 'restaurant';
-                animationEnterTimeout = 5000;
-                animationLeaveTimeout = 5000;
+                // TODO: Need to track current restaurant so we can switch
+                // to a different animation for entry
+                animation = 'default';
+                animationEnterTimeout = 550;
+                animationLeaveTimeout = 550;
                 component = <RestaurantComponent
                     key="card"
                     restaurants={this.state.restaurants}
@@ -189,7 +191,7 @@ export default class Main extends React.Component {
         return (
             <div>
                 <CSSTransitionGroup
-                    transitionName="animate"
+                    transitionName={animation}
                     transitionEnterTimeout={animationEnterTimeout}
                     transitionLeaveTimeout={animationLeaveTimeout}>
                     {component}

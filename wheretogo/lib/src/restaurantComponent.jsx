@@ -78,7 +78,7 @@ export default class RestaurantComponent extends React.Component {
 
     render() {
         return (
-            <div className="restaurant column-flex">
+            <div className="column-flex restaurant">
                 <div className="restaurant__container column-flex">
                     <div id="image-container" className="restaurant__img_container">
                         <img
