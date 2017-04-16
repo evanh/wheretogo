@@ -1,4 +1,5 @@
 @import 'material-resources';
+@import 'animations';
 
 .column-flex {
     flex-flow: column nowrap;
@@ -95,14 +96,8 @@
         &:hover {
             @include shadow(3);
         }
+        &:focus {
+            outline: none;
+        }
     }
-}
-
-.spinner {
-    width: 54px;
-    height: 54px;
-}
-
-.sk-cube {
-    @include color("primary");
 }

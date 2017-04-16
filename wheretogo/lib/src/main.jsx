@@ -1,12 +1,13 @@
 import React from 'react';
 import {get} from 'axios';
-import Spinner from 'react-spinkit';
+// import Spinner from 'react-spinkit';
 import shuffle from 'lodash/shuffle';
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 
 import StartButton from 'startButton.jsx';
 import RestaurantComponent from 'restaurantComponent.jsx';
 import SelectedRestaurant from 'selectedRestaurantComponent.jsx';
+import Spinner from 'spinner.jsx';
 
 import 'restaurant.scss';
 import 'animations.scss';
@@ -159,11 +160,7 @@ export default class Main extends React.Component {
                 animation = 'spinner';
                 animationEnterTimeout = 5000;
                 animationLeaveTimeout = 5000;
-                component = <Spinner
-                    key="spinner"
-                    noFadeIn={true}
-                    className="centered spinner"
-                    spinnerName='cube-grid' />;
+                component = <Spinner />
                 break;
             case 'in_use':
                 animation = 'restaurant';
