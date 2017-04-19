@@ -1,4 +1,5 @@
 import React from 'react';
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 
 export default class RestaurantComponent extends React.Component {
     constructor(props){
@@ -44,6 +45,7 @@ export default class RestaurantComponent extends React.Component {
         this.restaurantFilter(r => {
             return r.id !== restaurant.id;
         });
+        this.props.restaurantRejected(restaurant);
     }
 
     categoryRejected(category) {
@@ -78,41 +80,46 @@ export default class RestaurantComponent extends React.Component {
 
     render() {
         return (
-            <div className="column-flex restaurant">
-                <div className="restaurant__container column-flex">
-                    <div id="image-container" className="restaurant__img_container">
-                        <img
-                            id="yelp-image"
-                            className="relative-centered"
-                            src={this.state.currentRestaurant.image_url} />
-                    </div>
-                    <h2 className="restaurant__name">{this.state.currentRestaurant.name}?</h2>
-                    <hr className="restaurant__divider" />
-                    <button
-                        className="restaurant__button"
-                        onClick={this.props.restaurantSelected.bind(null, this.state.currentRestaurant)}>
-                        Yes Please!
-                    </button>
-                    <hr className="restaurant__divider" />
-                    <button
-                        className="restaurant__button"
-                        onClick={this.restaurantRejected.bind(null, this.state.currentRestaurant)}>
-                        Not this place today
-                    </button>
-                    <button
-                        className="restaurant__button"
-                        onClick={this.distanceRejected.bind(null, this.state.currentRestaurant)}>
-                        {this.state.currentRestaurant.walkingMinutes.toFixed(1)} minutes is too far
-                    </button>
-                    {this.state.currentRestaurant.categories.map(c => {
-                        return <button
-                            key={c.alias}
+            <div className="row-flex restaurant">
+                <CSSTransitionGroup
+                    transitionName="restaurant-cycle"
+                    transitionEnterTimeout={5000}
+                    transitionLeaveTimeout={5000}>
+                    <div key={this.state.currentRestaurant.name} className="column-flex restaurant__container">
+                        <div id="image-container" className="restaurant__img_container">
+                            <img
+                                id="yelp-image"
+                                className="relative-centered"
+                                src={this.state.currentRestaurant.image_url} />
+                        </div>
+                        <h2 className="restaurant__name">{this.state.currentRestaurant.name}?</h2>
+                        <hr className="restaurant__divider" />
+                        <button
                             className="restaurant__button"
-                            onClick={this.categoryRejected.bind(null, c)}>
-                            No {c.title} today
-                        </button>;
-                    })}
-                </div>
+                            onClick={this.props.restaurantSelected.bind(null, this.state.currentRestaurant)}>
+                            Yes Please!
+                        </button>
+                        <hr className="restaurant__divider" />
+                        <button
+                            className="restaurant__button"
+                            onClick={this.restaurantRejected.bind(null, this.state.currentRestaurant)}>
+                            Not this place today
+                        </button>
+                        <button
+                            className="restaurant__button"
+                            onClick={this.distanceRejected.bind(null, this.state.currentRestaurant)}>
+                            {this.state.currentRestaurant.walkingMinutes.toFixed(1)} minutes is too far
+                        </button>
+                        {this.state.currentRestaurant.categories.map(c => {
+                            return <button
+                                key={c.alias}
+                                className="restaurant__button"
+                                onClick={this.categoryRejected.bind(null, c)}>
+                                No {c.title} today
+                            </button>;
+                        })}
+                    </div>
+                </CSSTransitionGroup>
             </div>
         );
     }

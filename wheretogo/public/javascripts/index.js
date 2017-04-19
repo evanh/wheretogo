@@ -30959,7 +30959,9 @@
 	        _this.state = {
 	            status: 'not_started',
 	            restaurants: [],
-	            SelectedRestaurant: {},
+	            currentRestaurant: {},
+	            rejections: 0,
+	            selectedRestaurant: {},
 	            offset: 0,
 	            latitude: '',
 	            longitude: '',
@@ -30974,6 +30976,7 @@
 	        _this.noMoreOptions = _this.noMoreOptions.bind(_this);
 	        _this.addRejectedCategory = _this.addRejectedCategory.bind(_this);
 	        _this.addRejectedDistance = _this.addRejectedDistance.bind(_this);
+	        _this.restaurantRejected = _this.restaurantRejected.bind(_this);
 	        return _this;
 	    }
 	
@@ -31079,14 +31082,25 @@
 	        key: 'addRejectedCategory',
 	        value: function addRejectedCategory(category) {
 	            this.setState({
-	                rejectedCategories: this.state.rejectedCategories.concat([category.alias])
+	                rejectedCategories: this.state.rejectedCategories.concat([category.alias]),
+	                rejections: this.state.rejections + 1
 	            });
 	        }
 	    }, {
 	        key: 'addRejectedDistance',
 	        value: function addRejectedDistance(distance) {
 	            this.setState({
-	                rejectedDistance: distance
+	                rejectedDistance: distance,
+	                rejections: this.state.rejections + 1
+	            });
+	        }
+	    }, {
+	        key: 'restaurantRejected',
+	        value: function restaurantRejected(restaurant) {
+	            console.log(restaurant.name);
+	            this.setState({
+	                rejectedOne: true,
+	                rejections: this.state.rejections + 1
 	            });
 	        }
 	    }, {
@@ -31121,10 +31135,12 @@
 	                    animation = 'default';
 	                    animationEnterTimeout = 550;
 	                    animationLeaveTimeout = 550;
+	
 	                    component = _react2.default.createElement(_restaurantComponent2.default, {
 	                        key: 'card',
 	                        restaurants: this.state.restaurants,
 	                        restaurantSelected: this.restaurantSelected,
+	                        restaurantRejected: this.restaurantRejected,
 	                        noValidRestaurants: this.noMoreOptions,
 	                        categoryRejected: this.addRejectedCategory,
 	                        distanceRejected: this.addRejectedDistance
@@ -35540,6 +35556,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _CSSTransitionGroup = __webpack_require__(/*! react-transition-group/CSSTransitionGroup */ 564);
+	
+	var _CSSTransitionGroup2 = _interopRequireDefault(_CSSTransitionGroup);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -35603,6 +35623,7 @@
 	            this.restaurantFilter(function (r) {
 	                return r.id !== restaurant.id;
 	            });
+	            this.props.restaurantRejected(restaurant);
 	        }
 	    }, {
 	        key: 'categoryRejected',
@@ -35646,60 +35667,67 @@
 	
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'column-flex restaurant' },
+	                { className: 'row-flex restaurant' },
 	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'restaurant__container column-flex' },
+	                    _CSSTransitionGroup2.default,
+	                    {
+	                        transitionName: 'restaurant-cycle',
+	                        transitionEnterTimeout: 5000,
+	                        transitionLeaveTimeout: 5000 },
 	                    _react2.default.createElement(
 	                        'div',
-	                        { id: 'image-container', className: 'restaurant__img_container' },
-	                        _react2.default.createElement('img', {
-	                            id: 'yelp-image',
-	                            className: 'relative-centered',
-	                            src: this.state.currentRestaurant.image_url })
-	                    ),
-	                    _react2.default.createElement(
-	                        'h2',
-	                        { className: 'restaurant__name' },
-	                        this.state.currentRestaurant.name,
-	                        '?'
-	                    ),
-	                    _react2.default.createElement('hr', { className: 'restaurant__divider' }),
-	                    _react2.default.createElement(
-	                        'button',
-	                        {
-	                            className: 'restaurant__button',
-	                            onClick: this.props.restaurantSelected.bind(null, this.state.currentRestaurant) },
-	                        'Yes Please!'
-	                    ),
-	                    _react2.default.createElement('hr', { className: 'restaurant__divider' }),
-	                    _react2.default.createElement(
-	                        'button',
-	                        {
-	                            className: 'restaurant__button',
-	                            onClick: this.restaurantRejected.bind(null, this.state.currentRestaurant) },
-	                        'Not this place today'
-	                    ),
-	                    _react2.default.createElement(
-	                        'button',
-	                        {
-	                            className: 'restaurant__button',
-	                            onClick: this.distanceRejected.bind(null, this.state.currentRestaurant) },
-	                        this.state.currentRestaurant.walkingMinutes.toFixed(1),
-	                        ' minutes is too far'
-	                    ),
-	                    this.state.currentRestaurant.categories.map(function (c) {
-	                        return _react2.default.createElement(
+	                        { key: this.state.currentRestaurant.name, className: 'column-flex restaurant__container' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { id: 'image-container', className: 'restaurant__img_container' },
+	                            _react2.default.createElement('img', {
+	                                id: 'yelp-image',
+	                                className: 'relative-centered',
+	                                src: this.state.currentRestaurant.image_url })
+	                        ),
+	                        _react2.default.createElement(
+	                            'h2',
+	                            { className: 'restaurant__name' },
+	                            this.state.currentRestaurant.name,
+	                            '?'
+	                        ),
+	                        _react2.default.createElement('hr', { className: 'restaurant__divider' }),
+	                        _react2.default.createElement(
 	                            'button',
 	                            {
-	                                key: c.alias,
 	                                className: 'restaurant__button',
-	                                onClick: _this2.categoryRejected.bind(null, c) },
-	                            'No ',
-	                            c.title,
-	                            ' today'
-	                        );
-	                    })
+	                                onClick: this.props.restaurantSelected.bind(null, this.state.currentRestaurant) },
+	                            'Yes Please!'
+	                        ),
+	                        _react2.default.createElement('hr', { className: 'restaurant__divider' }),
+	                        _react2.default.createElement(
+	                            'button',
+	                            {
+	                                className: 'restaurant__button',
+	                                onClick: this.restaurantRejected.bind(null, this.state.currentRestaurant) },
+	                            'Not this place today'
+	                        ),
+	                        _react2.default.createElement(
+	                            'button',
+	                            {
+	                                className: 'restaurant__button',
+	                                onClick: this.distanceRejected.bind(null, this.state.currentRestaurant) },
+	                            this.state.currentRestaurant.walkingMinutes.toFixed(1),
+	                            ' minutes is too far'
+	                        ),
+	                        this.state.currentRestaurant.categories.map(function (c) {
+	                            return _react2.default.createElement(
+	                                'button',
+	                                {
+	                                    key: c.alias,
+	                                    className: 'restaurant__button',
+	                                    onClick: _this2.categoryRejected.bind(null, c) },
+	                                'No ',
+	                                c.title,
+	                                ' today'
+	                            );
+	                        })
+	                    )
 	                )
 	            );
 	        }
@@ -35831,7 +35859,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".spinner {\n  background: #3849aa;\n  color: #ffffff;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  width: 54px;\n  height: 54px;\n  animation-delay: 150ms;\n  animation: spinner 1s infinite; }\n\n@keyframes spinner {\n  0% {\n    border-radius: 100%; } }\n\n.start-button.default-leave {\n  transform-origin: left top;\n  animation: shrink 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes shrink {\n  10% {\n    color: #3849aa;\n    border-radius: 0px; }\n  80% {\n    opacity: 1; }\n  100% {\n    transform: translate(-2%, -5%) scale(0.07, 0.27);\n    z-index: -1;\n    opacity: 0; } }\n\n.spinner.default-enter {\n  transform-origin: left top;\n  animation: grow 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow {\n  0% {\n    transform: scale(0.01, 0.1); } }\n\n.spinner.default-leave {\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  animation: grow-to-card 600ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow-to-card {\n  66% {\n    transform: translate(-27px, -123px) scale(5.55, 9.15);\n    border-radius: 2px;\n    background-color: #f8f8f8;\n    z-index: -1; }\n  100% {\n    z-index: -1;\n    background-color: #f8f8f8; } }\n\n.restaurant.default-enter {\n  animation: card-enter 600ms 1; }\n\n@keyframes card-enter {\n  0% {\n    opacity: 0; }\n  66% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n.restaurant.default-leave {\n  animation: card-offscreen 150ms 1; }\n\n@keyframes card-offscreen {\n  100% {\n    transform: translateX(-110%); } }\n\n.column-flex {\n  flex-flow: column nowrap;\n  justify-content: center;\n  align-items: center;\n  display: flex; }\n\n.restaurant {\n  margin: 10px; }\n  .restaurant__container {\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n    width: 300px;\n    border-radius: 10px; }\n  .restaurant__name {\n    width: 100%;\n    margin: 0px;\n    text-align: center;\n    padding: 5px;\n    color: #252526; }\n  .restaurant__divider {\n    margin-top: 3px;\n    margin-bottom: 3px;\n    border: 2px;\n    border-top: 1px solid #979a9e;\n    background: #979a9e;\n    width: 100%; }\n  .restaurant__img_container {\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n    overflow: hidden;\n    width: 300px;\n    height: 300px;\n    margin: 0px 0px 5px 0px;\n    border-radius: 8px;\n    position: relative; }\n  .restaurant__button {\n    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);\n    background: #6e74dc;\n    color: #000000;\n    width: 95%;\n    margin: 3px;\n    border-radius: 0.5em;\n    border-width: 0.1em; }\n    .restaurant__button__yes {\n      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);\n      background: #00277a;\n      color: #ffffff; }\n      .restaurant__button__yes:hover {\n        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n    .restaurant__button:hover {\n      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n    .restaurant__button:focus {\n      outline: none; }\n\n.relative-centered {\n  top: 50%;\n  left: 50%;\n  position: absolute;\n  -webkit-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%); }\n\n.action-button {\n  transition: 0.15s ease-out;\n  font-family: 'Helvetica Neue', Helvetica, sans-serif;\n  padding: .78571429em 1.5em .78571429em;\n  line-height: 1em;\n  font-style: normal;\n  text-align: center;\n  border-radius: 0.5em;\n  border-width: 0em; }\n\n.started__button {\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  background: #3849aa;\n  color: #ffffff;\n  font-size: 2em;\n  font-weight: 700; }\n  .started__button:hover {\n    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23); }\n  .started__button:focus {\n    outline: none; }\n", ""]);
+	exports.push([module.id, ".spinner {\n  background: #3849aa;\n  color: #ffffff;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  width: 54px;\n  height: 54px;\n  animation-delay: 150ms;\n  animation: spinner 1s infinite; }\n\n@keyframes spinner {\n  0% {\n    border-radius: 100%; } }\n\n.start-button.default-leave {\n  transform-origin: left top;\n  animation: shrink 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes shrink {\n  10% {\n    color: #3849aa;\n    border-radius: 0px; }\n  80% {\n    opacity: 1; }\n  100% {\n    transform: translate(-2%, -5%) scale(0.07, 0.27);\n    z-index: -1;\n    opacity: 0; } }\n\n.spinner.default-enter {\n  transform-origin: left top;\n  animation: grow 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow {\n  0% {\n    transform: scale(0.01, 0.1); } }\n\n.spinner.default-leave {\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  animation: grow-to-card 600ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow-to-card {\n  66% {\n    transform: translate(-27px, -123px) scale(5.55, 9.15);\n    border-radius: 2px;\n    background-color: #f8f8f8;\n    z-index: -1; }\n  100% {\n    z-index: -1;\n    background-color: #f8f8f8; } }\n\n.restaurant.default-enter {\n  animation: card-enter 600ms 1; }\n\n@keyframes card-enter {\n  0% {\n    opacity: 0; }\n  66% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n.restaurant__container.restaurant-cycle-enter {\n  animation: card-onscreen 5000ms 1; }\n\n@keyframes card-onscreen {\n  0% {\n    transform: translateX(100vw); } }\n\n.restaurant__container.restaurant-cycle-leave {\n  animation: card-offscreen 5000ms 1; }\n\n@keyframes card-offscreen {\n  100% {\n    transform: translateX(-100vw); } }\n\n.column-flex {\n  flex-flow: column nowrap;\n  justify-content: center;\n  align-items: center;\n  display: flex; }\n\n.row-flex {\n  flex-flow: row nowrap;\n  justify-content: center;\n  align-items: center;\n  display: flex; }\n\n.restaurant {\n  margin: 10px; }\n  .restaurant__container {\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n    width: 300px;\n    display: inline-block;\n    border-radius: 10px; }\n  .restaurant__name {\n    width: 100%;\n    margin: 0px;\n    text-align: center;\n    padding: 5px;\n    color: #252526; }\n  .restaurant__divider {\n    margin-top: 3px;\n    margin-bottom: 3px;\n    border: 2px;\n    border-top: 1px solid #979a9e;\n    background: #979a9e;\n    width: 100%; }\n  .restaurant__img_container {\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n    overflow: hidden;\n    width: 300px;\n    height: 300px;\n    margin: 0px 0px 5px 0px;\n    border-radius: 8px;\n    position: relative; }\n  .restaurant__button {\n    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);\n    background: #6e74dc;\n    color: #000000;\n    width: 95%;\n    margin: 3px;\n    border-radius: 0.5em;\n    border-width: 0.1em; }\n    .restaurant__button__yes {\n      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);\n      background: #00277a;\n      color: #ffffff; }\n      .restaurant__button__yes:hover {\n        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n    .restaurant__button:hover {\n      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n    .restaurant__button:focus {\n      outline: none; }\n\n.relative-centered {\n  top: 50%;\n  left: 50%;\n  position: absolute;\n  -webkit-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%); }\n\n.action-button {\n  transition: 0.15s ease-out;\n  font-family: 'Helvetica Neue', Helvetica, sans-serif;\n  padding: .78571429em 1.5em .78571429em;\n  line-height: 1em;\n  font-style: normal;\n  text-align: center;\n  border-radius: 0.5em;\n  border-width: 0em; }\n\n.started__button {\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  background: #3849aa;\n  color: #ffffff;\n  font-size: 2em;\n  font-weight: 700; }\n  .started__button:hover {\n    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23); }\n  .started__button:focus {\n    outline: none; }\n", ""]);
 	
 	// exports
 
@@ -35877,7 +35905,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".spinner {\n  background: #3849aa;\n  color: #ffffff;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  width: 54px;\n  height: 54px;\n  animation-delay: 150ms;\n  animation: spinner 1s infinite; }\n\n@keyframes spinner {\n  0% {\n    border-radius: 100%; } }\n\n.start-button.default-leave {\n  transform-origin: left top;\n  animation: shrink 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes shrink {\n  10% {\n    color: #3849aa;\n    border-radius: 0px; }\n  80% {\n    opacity: 1; }\n  100% {\n    transform: translate(-2%, -5%) scale(0.07, 0.27);\n    z-index: -1;\n    opacity: 0; } }\n\n.spinner.default-enter {\n  transform-origin: left top;\n  animation: grow 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow {\n  0% {\n    transform: scale(0.01, 0.1); } }\n\n.spinner.default-leave {\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  animation: grow-to-card 600ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow-to-card {\n  66% {\n    transform: translate(-27px, -123px) scale(5.55, 9.15);\n    border-radius: 2px;\n    background-color: #f8f8f8;\n    z-index: -1; }\n  100% {\n    z-index: -1;\n    background-color: #f8f8f8; } }\n\n.restaurant.default-enter {\n  animation: card-enter 600ms 1; }\n\n@keyframes card-enter {\n  0% {\n    opacity: 0; }\n  66% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n.restaurant.default-leave {\n  animation: card-offscreen 150ms 1; }\n\n@keyframes card-offscreen {\n  100% {\n    transform: translateX(-110%); } }\n", ""]);
+	exports.push([module.id, ".spinner {\n  background: #3849aa;\n  color: #ffffff;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  width: 54px;\n  height: 54px;\n  animation-delay: 150ms;\n  animation: spinner 1s infinite; }\n\n@keyframes spinner {\n  0% {\n    border-radius: 100%; } }\n\n.start-button.default-leave {\n  transform-origin: left top;\n  animation: shrink 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes shrink {\n  10% {\n    color: #3849aa;\n    border-radius: 0px; }\n  80% {\n    opacity: 1; }\n  100% {\n    transform: translate(-2%, -5%) scale(0.07, 0.27);\n    z-index: -1;\n    opacity: 0; } }\n\n.spinner.default-enter {\n  transform-origin: left top;\n  animation: grow 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow {\n  0% {\n    transform: scale(0.01, 0.1); } }\n\n.spinner.default-leave {\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  animation: grow-to-card 600ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow-to-card {\n  66% {\n    transform: translate(-27px, -123px) scale(5.55, 9.15);\n    border-radius: 2px;\n    background-color: #f8f8f8;\n    z-index: -1; }\n  100% {\n    z-index: -1;\n    background-color: #f8f8f8; } }\n\n.restaurant.default-enter {\n  animation: card-enter 600ms 1; }\n\n@keyframes card-enter {\n  0% {\n    opacity: 0; }\n  66% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n.restaurant__container.restaurant-cycle-enter {\n  animation: card-onscreen 5000ms 1; }\n\n@keyframes card-onscreen {\n  0% {\n    transform: translateX(100vw); } }\n\n.restaurant__container.restaurant-cycle-leave {\n  animation: card-offscreen 5000ms 1; }\n\n@keyframes card-offscreen {\n  100% {\n    transform: translateX(-100vw); } }\n", ""]);
 	
 	// exports
 

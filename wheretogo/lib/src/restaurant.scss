@@ -8,12 +8,20 @@
     display: flex;
 }
 
+.row-flex {
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
 .restaurant {
     margin: 10px;
 
     &__container {
         @include shadow(1);
         width: 300px;
+        display: inline-block;
         // border: 1px solid #979a9e;
         border-radius: 10px;
     }

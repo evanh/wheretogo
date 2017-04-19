@@ -85,12 +85,22 @@
     }
 }
 
-.restaurant.default-leave {
-    animation: card-offscreen 150ms 1;
+.restaurant__container.restaurant-cycle-enter {
+    animation: card-onscreen 5000ms 1;
+}
+
+@keyframes card-onscreen {
+    0% {
+        transform: translateX(100vw);
+    }
+}
+
+.restaurant__container.restaurant-cycle-leave {
+    animation: card-offscreen 5000ms 1;
 }
 
 @keyframes card-offscreen {
     100% {
-        transform: translateX(-110%);
+        transform: translateX(-100vw);
     }
 }

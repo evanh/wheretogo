@@ -19,7 +19,9 @@ export default class Main extends React.Component {
         this.state = {
             status: 'not_started',
             restaurants: [],
-            SelectedRestaurant: {},
+            currentRestaurant: {},
+            rejections: 0,
+            selectedRestaurant: {},
             offset: 0,
             latitude: '',
             longitude: '',
@@ -34,6 +36,7 @@ export default class Main extends React.Component {
         this.noMoreOptions = this.noMoreOptions.bind(this);
         this.addRejectedCategory = this.addRejectedCategory.bind(this);
         this.addRejectedDistance = this.addRejectedDistance.bind(this);
+        this.restaurantRejected = this.restaurantRejected.bind(this);
     }
 
     fetchRestaurants() {
@@ -129,12 +132,22 @@ export default class Main extends React.Component {
     addRejectedCategory(category) {
         this.setState({
             rejectedCategories: this.state.rejectedCategories.concat([category.alias]),
+            rejections: this.state.rejections + 1,
         });
     }
 
     addRejectedDistance(distance) {
         this.setState({
             rejectedDistance: distance,
+            rejections: this.state.rejections + 1,
+        });
+    }
+
+    restaurantRejected(restaurant) {
+        console.log(restaurant.name);
+        this.setState({
+            rejectedOne: true,
+            rejections: this.state.rejections + 1,
         });
     }
 
@@ -168,10 +181,12 @@ export default class Main extends React.Component {
                 animation = 'default';
                 animationEnterTimeout = 550;
                 animationLeaveTimeout = 550;
+
                 component = <RestaurantComponent
                     key="card"
                     restaurants={this.state.restaurants}
                     restaurantSelected={this.restaurantSelected}
+                    restaurantRejected={this.restaurantRejected}
                     noValidRestaurants={this.noMoreOptions}
                     categoryRejected={this.addRejectedCategory}
                     distanceRejected={this.addRejectedDistance}
