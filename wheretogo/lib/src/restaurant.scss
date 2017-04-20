@@ -22,7 +22,7 @@
         @include shadow(1);
         width: 300px;
         display: inline-block;
-        // border: 1px solid #979a9e;
+        border: 1px solid #979a9e;
         border-radius: 10px;
     }
 
@@ -54,7 +54,7 @@
     }
 
     &__button {
-        @include shadow(2);
+        @include shadow(1);
         @include color("light");
         &__yes {
             @include shadow(2);
@@ -68,7 +68,7 @@
         border-radius: 0.5em;
         border-width: 0.1em;
         &:hover {
-            @include shadow(4);
+            @include shadow(3);
         }
         &:focus {
             outline: none;

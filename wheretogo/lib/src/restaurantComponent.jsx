@@ -83,9 +83,10 @@ export default class RestaurantComponent extends React.Component {
             <div className="row-flex restaurant">
                 <CSSTransitionGroup
                     transitionName="restaurant-cycle"
-                    transitionEnterTimeout={5000}
-                    transitionLeaveTimeout={5000}>
-                    <div key={this.state.currentRestaurant.name} className="column-flex restaurant__container">
+                    transitionEnterTimeout={150}
+                    transitionLeaveTimeout={150}>
+                    <div key={this.state.currentRestaurant.name} className="restaurant__container">
+                        <div className="column-flex">
                         <div id="image-container" className="restaurant__img_container">
                             <img
                                 id="yelp-image"
@@ -118,6 +119,7 @@ export default class RestaurantComponent extends React.Component {
                                 No {c.title} today
                             </button>;
                         })}
+                        </div>
                     </div>
                 </CSSTransitionGroup>
             </div>
