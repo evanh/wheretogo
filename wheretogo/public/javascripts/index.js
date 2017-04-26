@@ -30926,17 +30926,17 @@
 	
 	var _restaurantComponent2 = _interopRequireDefault(_restaurantComponent);
 	
-	var _selectedRestaurantComponent = __webpack_require__(/*! selectedRestaurantComponent.jsx */ 553);
+	var _selectedRestaurantComponent = __webpack_require__(/*! selectedRestaurantComponent.jsx */ 561);
 	
 	var _selectedRestaurantComponent2 = _interopRequireDefault(_selectedRestaurantComponent);
 	
-	var _spinner = __webpack_require__(/*! spinner.jsx */ 554);
+	var _spinner = __webpack_require__(/*! spinner.jsx */ 562);
 	
 	var _spinner2 = _interopRequireDefault(_spinner);
 	
-	__webpack_require__(/*! restaurant.scss */ 555);
+	__webpack_require__(/*! restaurant.scss */ 563);
 	
-	__webpack_require__(/*! animations.scss */ 559);
+	__webpack_require__(/*! animations.scss */ 567);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -35208,6 +35208,8 @@
 	
 	var _CSSTransitionGroup2 = _interopRequireDefault(_CSSTransitionGroup);
 	
+	var _reactTextfit = __webpack_require__(/*! react-textfit */ 553);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -35337,8 +35339,11 @@
 	                                    src: this.state.currentRestaurant.image_url })
 	                            ),
 	                            _react2.default.createElement(
-	                                'h2',
-	                                { className: 'restaurant__name' },
+	                                _reactTextfit.Textfit,
+	                                {
+	                                    mode: 'single',
+	                                    forceSingleModeWidth: false,
+	                                    className: 'restaurant__name' },
 	                                this.state.currentRestaurant.name,
 	                                '?'
 	                            ),
@@ -35401,12 +35406,541 @@
 
 /***/ },
 /* 553 */
+/*!***************************************!*\
+  !*** ../~/react-textfit/lib/index.js ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.Textfit = undefined;
+	
+	var _Textfit = __webpack_require__(/*! ./Textfit */ 554);
+	
+	var _Textfit2 = _interopRequireDefault(_Textfit);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.Textfit = _Textfit2.default;
+	exports.default = _Textfit2.default;
+
+/***/ },
+/* 554 */
+/*!*****************************************!*\
+  !*** ../~/react-textfit/lib/Textfit.js ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 32);
+	
+	var _shallowEqual = __webpack_require__(/*! ./utils/shallowEqual */ 555);
+	
+	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
+	
+	var _series = __webpack_require__(/*! ./utils/series */ 556);
+	
+	var _series2 = _interopRequireDefault(_series);
+	
+	var _whilst = __webpack_require__(/*! ./utils/whilst */ 557);
+	
+	var _whilst2 = _interopRequireDefault(_whilst);
+	
+	var _throttle = __webpack_require__(/*! ./utils/throttle */ 558);
+	
+	var _throttle2 = _interopRequireDefault(_throttle);
+	
+	var _uniqueId = __webpack_require__(/*! ./utils/uniqueId */ 559);
+	
+	var _uniqueId2 = _interopRequireDefault(_uniqueId);
+	
+	var _innerSize = __webpack_require__(/*! ./utils/innerSize */ 560);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	
+	function assertElementFitsWidth(el, width) {
+	    // -1: temporary bugfix, will be refactored soon
+	    return el.scrollWidth - 1 <= width;
+	}
+	
+	function assertElementFitsHeight(el, height) {
+	    // -1: temporary bugfix, will be refactored soon
+	    return el.scrollHeight - 1 <= height;
+	}
+	
+	function noop() {}
+	
+	exports.default = (0, _react.createClass)({
+	
+	    displayName: 'Textfit',
+	
+	    propTypes: {
+	        children: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.func]),
+	        text: _react.PropTypes.string,
+	        min: _react.PropTypes.number,
+	        max: _react.PropTypes.number,
+	        mode: _react.PropTypes.oneOf(['single', 'multi']),
+	        forceSingleModeWidth: _react.PropTypes.bool,
+	        perfectFit: _react.PropTypes.bool,
+	        throttle: _react.PropTypes.number,
+	        onReady: _react.PropTypes.func
+	    },
+	
+	    getDefaultProps: function getDefaultProps() {
+	        return {
+	            min: 1,
+	            max: 100,
+	            mode: 'multi',
+	            forceSingleModeWidth: true,
+	            perfectFit: true,
+	            throttle: 50,
+	            autoResize: true,
+	            onReady: noop
+	        };
+	    },
+	    getInitialState: function getInitialState() {
+	        return {
+	            fontSize: null,
+	            ready: false
+	        };
+	    },
+	    componentWillMount: function componentWillMount() {
+	        this.handleWindowResize = (0, _throttle2.default)(this.handleWindowResize, this.props.throttle);
+	    },
+	    componentDidMount: function componentDidMount() {
+	        var autoResize = this.props.autoResize;
+	
+	        if (autoResize) {
+	            window.addEventListener('resize', this.handleWindowResize);
+	        }
+	        this.process();
+	    },
+	    componentDidUpdate: function componentDidUpdate(prevProps) {
+	        var ready = this.state.ready;
+	
+	        if (!ready) return;
+	        if ((0, _shallowEqual2.default)(this.props, prevProps)) return;
+	        this.process();
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        var autoResize = this.props.autoResize;
+	
+	        if (autoResize) {
+	            window.removeEventListener('resize', this.handleWindowResize);
+	        }
+	        // Setting a new pid will cancel all running processes
+	        this.pid = (0, _uniqueId2.default)();
+	    },
+	    handleWindowResize: function handleWindowResize() {
+	        this.process();
+	    },
+	    process: function process() {
+	        var _this = this;
+	
+	        var _props = this.props,
+	            min = _props.min,
+	            max = _props.max,
+	            mode = _props.mode,
+	            forceSingleModeWidth = _props.forceSingleModeWidth,
+	            perfectFit = _props.perfectFit,
+	            onReady = _props.onReady;
+	
+	        var el = (0, _reactDom.findDOMNode)(this);
+	        var wrapper = this.refs.wrapper;
+	
+	
+	        var originalWidth = (0, _innerSize.innerWidth)(el);
+	        var originalHeight = (0, _innerSize.innerHeight)(el);
+	
+	        if (originalHeight <= 0 || isNaN(originalHeight)) {
+	            console.warn('Can not process element without height. Make sure the element is displayed and has a static height.');
+	            return;
+	        }
+	
+	        if (originalWidth <= 0 || isNaN(originalWidth)) {
+	            console.warn('Can not process element without width. Make sure the element is displayed and has a static width.');
+	            return;
+	        }
+	
+	        var pid = (0, _uniqueId2.default)();
+	        this.pid = pid;
+	
+	        var shouldCancelProcess = function shouldCancelProcess() {
+	            return pid !== _this.pid;
+	        };
+	
+	        var testPrimary = mode === 'multi' ? function () {
+	            return assertElementFitsHeight(wrapper, originalHeight);
+	        } : function () {
+	            return assertElementFitsWidth(wrapper, originalWidth);
+	        };
+	
+	        var testSecondary = mode === 'multi' ? function () {
+	            return assertElementFitsWidth(wrapper, originalWidth);
+	        } : function () {
+	            return assertElementFitsHeight(wrapper, originalHeight);
+	        };
+	
+	        var mid = void 0;
+	        var low = min;
+	        var high = max;
+	
+	        this.setState({ ready: false });
+	
+	        (0, _series2.default)([
+	        // Step 1:
+	        // Binary search to fit the element's height (multi line) / width (single line)
+	        function (stepCallback) {
+	            return (0, _whilst2.default)(function () {
+	                return low <= high;
+	            }, function (whilstCallback) {
+	                if (shouldCancelProcess()) return whilstCallback(true);
+	                mid = parseInt((low + high) / 2, 10);
+	                _this.setState({ fontSize: mid }, function () {
+	                    if (shouldCancelProcess()) return whilstCallback(true);
+	                    if (testPrimary()) low = mid + 1;else high = mid - 1;
+	                    return whilstCallback();
+	                });
+	            }, stepCallback);
+	        },
+	        // Step 2:
+	        // Binary search to fit the element's width (multi line) / height (single line)
+	        // If mode is single and forceSingleModeWidth is true, skip this step
+	        // in order to not fit the elements height and decrease the width
+	        function (stepCallback) {
+	            if (mode === 'single' && forceSingleModeWidth) return stepCallback();
+	            if (testSecondary()) return stepCallback();
+	            low = min;
+	            high = mid;
+	            return (0, _whilst2.default)(function () {
+	                return low <= high;
+	            }, function (whilstCallback) {
+	                if (shouldCancelProcess()) return whilstCallback(true);
+	                mid = parseInt((low + high) / 2, 10);
+	                _this.setState({ fontSize: mid }, function () {
+	                    if (pid !== _this.pid) return whilstCallback(true);
+	                    if (testSecondary()) low = mid + 1;else high = mid - 1;
+	                    return whilstCallback();
+	                });
+	            }, stepCallback);
+	        },
+	        // Step 3
+	        // Sometimes the text still overflows the elements bounds.
+	        // If perfectFit is true, decrease fontSize until it fits.
+	        function (stepCallback) {
+	            if (!perfectFit) return stepCallback();
+	            if (testPrimary()) return stepCallback();
+	            (0, _whilst2.default)(function () {
+	                return !testPrimary();
+	            }, function (whilstCallback) {
+	                if (shouldCancelProcess()) return whilstCallback(true);
+	                _this.setState({ fontSize: --mid }, whilstCallback);
+	            }, stepCallback);
+	        },
+	        // Step 4
+	        // Make sure fontSize is always greater than 0
+	        function (stepCallback) {
+	            if (mid > 0) return stepCallback();
+	            mid = 1;
+	            _this.setState({ fontSize: mid }, stepCallback);
+	        }], function (err) {
+	            // err will be true, if another process was triggered
+	            if (err) return;
+	            _this.setState({ ready: true }, function () {
+	                return onReady(mid);
+	            });
+	        });
+	    },
+	    render: function render() {
+	        var _props2 = this.props,
+	            children = _props2.children,
+	            text = _props2.text,
+	            style = _props2.style,
+	            min = _props2.min,
+	            max = _props2.max,
+	            mode = _props2.mode,
+	            forceWidth = _props2.forceWidth,
+	            forceSingleModeWidth = _props2.forceSingleModeWidth,
+	            perfectFit = _props2.perfectFit,
+	            throttle = _props2.throttle,
+	            autoResize = _props2.autoResize,
+	            onReady = _props2.onReady,
+	            props = _objectWithoutProperties(_props2, ['children', 'text', 'style', 'min', 'max', 'mode', 'forceWidth', 'forceSingleModeWidth', 'perfectFit', 'throttle', 'autoResize', 'onReady']);
+	
+	        var _state = this.state,
+	            fontSize = _state.fontSize,
+	            ready = _state.ready;
+	
+	        var finalStyle = _extends({}, style, {
+	            fontSize: fontSize
+	        });
+	
+	        var wrapperStyle = {
+	            display: ready ? 'block' : 'inline-block'
+	        };
+	        if (mode === 'single') wrapperStyle.whiteSpace = 'nowrap';
+	
+	        return _react2.default.createElement(
+	            'div',
+	            _extends({ style: finalStyle }, props),
+	            _react2.default.createElement(
+	                'span',
+	                { ref: 'wrapper', style: wrapperStyle },
+	                text && typeof children === 'function' ? ready ? children(text) : text : children
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+/* 555 */
+/*!****************************************************!*\
+  !*** ../~/react-textfit/lib/utils/shallowEqual.js ***!
+  \****************************************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = shallowEqual;
+	function shallowEqual(objA, objB) {
+	    if (objA === objB) {
+	        return true;
+	    }
+	
+	    var keysA = Object.keys(objA);
+	    var keysB = Object.keys(objB);
+	
+	    if (keysA.length !== keysB.length) {
+	        return false;
+	    }
+	
+	    // Test for A's keys different from B.
+	    var hasOwn = Object.prototype.hasOwnProperty;
+	    for (var i = 0; i < keysA.length; i++) {
+	        if (!hasOwn.call(objB, keysA[i]) || objA[keysA[i]] !== objB[keysA[i]]) {
+	            return false;
+	        }
+	    }
+	
+	    return true;
+	}
+
+/***/ },
+/* 556 */
+/*!**********************************************!*\
+  !*** ../~/react-textfit/lib/utils/series.js ***!
+  \**********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = series;
+	
+	var _process = __webpack_require__(/*! process */ 3);
+	
+	var _process2 = _interopRequireDefault(_process);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function series(tasks, cb) {
+	    var results = [];
+	    var current = 0;
+	    var isSync = true;
+	
+	    function done(err) {
+	        function end() {
+	            if (cb) cb(err, results);
+	        }
+	        if (isSync) _process2.default.nextTick(end);else end();
+	    }
+	
+	    function each(err, result) {
+	        results.push(result);
+	        if (++current >= tasks.length || err) done(err);else tasks[current](each);
+	    }
+	
+	    if (tasks.length > 0) tasks[0](each);else done(null);
+	
+	    isSync = false;
+	} /**
+	   * Run the functions in the tasks array in series, each one running once the previous function has completed.
+	   * If any functions in the series pass an error to its callback, no more functions are run,
+	   * and callback is immediately called with the value of the error. Otherwise, callback receives an array of results
+	   * when tasks have completed.
+	   * Taken from https://github.com/feross/run-series
+	   *
+	   * @params {Array} tasks An array containing functions to run, each function is passed a callback(err, result) which it must call on completion with an error err (which can be null) and an optional result value.
+	   * @params {Function} callback(err, results) - An optional callback to run once all the functions have completed. This function gets a results array containing all the result arguments passed to the task callbacks.
+	   */
+
+/***/ },
+/* 557 */
+/*!**********************************************!*\
+  !*** ../~/react-textfit/lib/utils/whilst.js ***!
+  \**********************************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = whilst;
+	var noop = function noop() {};
+	
+	/**
+	 * Repeatedly call fn, while test returns true. Calls callback when stopped, or an error occurs.
+	 *
+	 * @param {Function} test Synchronous truth test to perform before each execution of fn.
+	 * @param {Function} fn A function which is called each time test passes. The function is passed a callback(err), which must be called once it has completed with an optional err argument.
+	 * @param {Function} callback A callback which is called after the test fails and repeated execution of fn has stopped.
+	 */
+	
+	function whilst(test, iterator) {
+	    var callback = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : noop;
+	
+	    if (test()) {
+	        iterator(function next(err) {
+	            for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	                args[_key - 1] = arguments[_key];
+	            }
+	
+	            if (err) {
+	                callback(err);
+	            } else if (test.apply(this, args)) {
+	                iterator(next);
+	            } else {
+	                callback(null);
+	            }
+	        });
+	    } else {
+	        callback(null);
+	    }
+	}
+
+/***/ },
+/* 558 */
+/*!************************************************!*\
+  !*** ../~/react-textfit/lib/utils/throttle.js ***!
+  \************************************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = throttle;
+	/**
+	 * Returns a new function that, when invoked, invokes `func` at most once per `wait` milliseconds.
+	 * Taken from https://github.com/component/throttle v1.0.0
+	 *
+	 * @param {Function} func Function to wrap.
+	 * @param {Number} wait Number of milliseconds that must elapse between `func` invocations.
+	 * @return {Function} A new function that wraps the `func` function passed in.
+	 */
+	
+	function throttle(func, wait) {
+	    var ctx = void 0;
+	    var args = void 0;
+	    var rtn = void 0;
+	    var timeoutID = void 0;
+	    var last = 0;
+	
+	    function call() {
+	        timeoutID = 0;
+	        last = +new Date();
+	        rtn = func.apply(ctx, args);
+	        ctx = null;
+	        args = null;
+	    }
+	
+	    return function throttled() {
+	        ctx = this;
+	        args = arguments;
+	        var delta = new Date() - last;
+	        if (!timeoutID) {
+	            if (delta >= wait) call();else timeoutID = setTimeout(call, wait - delta);
+	        }
+	        return rtn;
+	    };
+	}
+
+/***/ },
+/* 559 */
+/*!************************************************!*\
+  !*** ../~/react-textfit/lib/utils/uniqueId.js ***!
+  \************************************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = uniqueId;
+	var uid = 0;
+	
+	function uniqueId() {
+	    return uid++;
+	}
+
+/***/ },
+/* 560 */
+/*!*************************************************!*\
+  !*** ../~/react-textfit/lib/utils/innerSize.js ***!
+  \*************************************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.innerHeight = innerHeight;
+	exports.innerWidth = innerWidth;
+	// Calculate height without padding.
+	function innerHeight(el) {
+	    var style = window.getComputedStyle(el, null);
+	    return el.clientHeight - parseInt(style.getPropertyValue('padding-top'), 10) - parseInt(style.getPropertyValue('padding-bottom'), 10);
+	}
+	
+	// Calculate width without padding.
+	function innerWidth(el) {
+	    var style = window.getComputedStyle(el, null);
+	    return el.clientWidth - parseInt(style.getPropertyValue('padding-left'), 10) - parseInt(style.getPropertyValue('padding-right'), 10);
+	}
+
+/***/ },
+/* 561 */
 /*!*****************************************!*\
   !*** ./selectedRestaurantComponent.jsx ***!
   \*****************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -35418,6 +35952,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _reactTextfit = __webpack_require__(/*! react-textfit */ 553);
+	
+	var _axios = __webpack_require__(/*! axios */ 475);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -35426,34 +35964,79 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	var GOOGLE_API_KEY = "AIzaSyD2OW6VNqya1yPF07lbsWVHprOjlXrqhRc";
+	
 	var SelectedRestaurantComponent = function (_React$Component) {
 	    _inherits(SelectedRestaurantComponent, _React$Component);
 	
-	    function SelectedRestaurantComponent() {
+	    function SelectedRestaurantComponent(props) {
 	        _classCallCheck(this, SelectedRestaurantComponent);
 	
-	        return _possibleConstructorReturn(this, (SelectedRestaurantComponent.__proto__ || Object.getPrototypeOf(SelectedRestaurantComponent)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (SelectedRestaurantComponent.__proto__ || Object.getPrototypeOf(SelectedRestaurantComponent)).call(this, props));
+	
+	        _this.state = {
+	            restaurant: null
+	        };
+	        return _this;
 	    }
 	
 	    _createClass(SelectedRestaurantComponent, [{
-	        key: "render",
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(props) {
+	            var _this2 = this;
+	
+	            (0, _axios.get)('/restaurant/' + props.restaurant.id).then(function (response) {
+	                if (response.status !== 200) {
+	                    return;
+	                }
+	
+	                _this2.setState({
+	                    restaurant: response.data
+	                });
+	            }).catch(function (err) {
+	                console.log(err);
+	            });
+	        }
+	    }, {
+	        key: 'render',
 	        value: function render() {
-	            var restaurant = this.props.restaurant;
+	            var restaurant = this.state.restaurant || this.props.restaurant;
+	            var google_embed = 'https://www.google.com/maps/embed/v1/place?q=' + restaurant.name + '&key=' + GOOGLE_API_KEY;
+	
+	            if (restaurant.photos == null) {
+	                restaurant.photos = [];
+	            }
 	            return _react2.default.createElement(
-	                "div",
-	                null,
+	                'div',
+	                { key: 'selected', className: 'column-flex selected' },
+	                _react2.default.createElement('iframe', {
+	                    width: '600',
+	                    height: '450',
+	                    frameBorder: '0',
+	                    style: { border: 0 },
+	                    src: google_embed,
+	                    allowFullScreen: true }),
 	                _react2.default.createElement(
-	                    "span",
-	                    null,
+	                    _reactTextfit.Textfit,
+	                    { mode: 'single', forceSingleModeWidth: false },
 	                    restaurant.name
 	                ),
-	                _react2.default.createElement("img", {
-	                    src: restaurant.image_url,
-	                    className: "restaurant__image" }),
+	                restaurant.photos.forEach(function (photo) {
+	                    return _react2.default.createElement('img', { src: photo });
+	                }),
 	                _react2.default.createElement(
-	                    "button",
+	                    'p',
+	                    null,
+	                    restaurant.price,
+	                    ' ',
+	                    restaurant.rating,
+	                    ' ',
+	                    restaurant.review_count
+	                ),
+	                _react2.default.createElement(
+	                    'button',
 	                    { onClick: this.props.startAgain },
-	                    "Start Again"
+	                    'Start Again'
 	                )
 	            );
 	        }
@@ -35471,7 +36054,7 @@
 	};
 
 /***/ },
-/* 554 */
+/* 562 */
 /*!*********************!*\
   !*** ./spinner.jsx ***!
   \*********************/
@@ -35522,7 +36105,7 @@
 	Spinner.propTypes = {};
 
 /***/ },
-/* 555 */
+/* 563 */
 /*!*************************!*\
   !*** ./restaurant.scss ***!
   \*************************/
@@ -35531,10 +36114,10 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../~/css-loader!./../~/sass-loader/lib/loader.js!./restaurant.scss */ 556);
+	var content = __webpack_require__(/*! !./../~/css-loader!./../~/sass-loader/lib/loader.js!./restaurant.scss */ 564);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../~/style-loader/addStyles.js */ 558)(content, {});
+	var update = __webpack_require__(/*! ./../~/style-loader/addStyles.js */ 566)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -35551,13 +36134,13 @@
 	}
 
 /***/ },
-/* 556 */
+/* 564 */
 /*!************************************************************************!*\
   !*** ../~/css-loader!../~/sass-loader/lib/loader.js!./restaurant.scss ***!
   \************************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(/*! ./../~/css-loader/lib/css-base.js */ 557)();
+	exports = module.exports = __webpack_require__(/*! ./../~/css-loader/lib/css-base.js */ 565)();
 	// imports
 	
 	
@@ -35568,7 +36151,7 @@
 
 
 /***/ },
-/* 557 */
+/* 565 */
 /*!***************************************!*\
   !*** ../~/css-loader/lib/css-base.js ***!
   \***************************************/
@@ -35627,7 +36210,7 @@
 
 
 /***/ },
-/* 558 */
+/* 566 */
 /*!**************************************!*\
   !*** ../~/style-loader/addStyles.js ***!
   \**************************************/
@@ -35882,7 +36465,7 @@
 
 
 /***/ },
-/* 559 */
+/* 567 */
 /*!*************************!*\
   !*** ./animations.scss ***!
   \*************************/
@@ -35891,10 +36474,10 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../~/css-loader!./../~/sass-loader/lib/loader.js!./animations.scss */ 560);
+	var content = __webpack_require__(/*! !./../~/css-loader!./../~/sass-loader/lib/loader.js!./animations.scss */ 568);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../~/style-loader/addStyles.js */ 558)(content, {});
+	var update = __webpack_require__(/*! ./../~/style-loader/addStyles.js */ 566)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -35911,13 +36494,13 @@
 	}
 
 /***/ },
-/* 560 */
+/* 568 */
 /*!************************************************************************!*\
   !*** ../~/css-loader!../~/sass-loader/lib/loader.js!./animations.scss ***!
   \************************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(/*! ./../~/css-loader/lib/css-base.js */ 557)();
+	exports = module.exports = __webpack_require__(/*! ./../~/css-loader/lib/css-base.js */ 565)();
 	// imports
 	
 	

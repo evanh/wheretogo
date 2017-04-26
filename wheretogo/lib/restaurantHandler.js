@@ -78,6 +78,30 @@ function getRestaurantsInRadius(req, res, next) {
     });
 }
 
+function getRestaurantDetails(req, res, next) {
+    return Promise.coroutine(function *g() {
+        yield checkToken();
+
+        const options = {
+            url: `${yelpAPI}/v3/businesses/${req.params.businessID}`,
+            json: true,
+            headers: {
+                Authorization: `Bearer ${ACCESS_DATA.access_token}`,
+            },
+        };
+
+        const response = yield axios(options);
+        res.send(200, response.data);
+    })().catch(err => {
+        console.log(err);
+        if (err.response != null) {
+            console.log(err.response.data);
+        }
+        throw err;
+    });
+}
+
 module.exports = exports = {
     getRestaurantsInRadius: getRestaurantsInRadius,
+    getRestaurantDetails: getRestaurantDetails,
 };

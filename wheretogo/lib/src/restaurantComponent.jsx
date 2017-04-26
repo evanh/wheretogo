@@ -1,5 +1,6 @@
 import React from 'react';
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import { Textfit } from 'react-textfit';
 
 export default class RestaurantComponent extends React.Component {
     constructor(props){
@@ -93,7 +94,12 @@ export default class RestaurantComponent extends React.Component {
                                 className="relative-centered"
                                 src={this.state.currentRestaurant.image_url} />
                         </div>
-                        <h2 className="restaurant__name">{this.state.currentRestaurant.name}?</h2>
+                        <Textfit
+                            mode="single"
+                            forceSingleModeWidth={false}
+                            className="restaurant__name">
+                            {this.state.currentRestaurant.name}?
+                        </Textfit>
                         <hr className="restaurant__divider" />
                         <button
                             className="restaurant__button"
