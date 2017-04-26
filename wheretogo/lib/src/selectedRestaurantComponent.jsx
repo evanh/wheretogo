@@ -2,7 +2,7 @@ import React from 'react';
 import { Textfit } from 'react-textfit';
 import {get} from 'axios';
 
-const GOOGLE_API_KEY = "AIzaSyD2OW6VNqya1yPF07lbsWVHprOjlXrqhRc"
+const GOOGLE_API_KEY = 'AIzaSyD2OW6VNqya1yPF07lbsWVHprOjlXrqhRc';
 
 export default class SelectedRestaurantComponent extends React.Component {
     constructor(props) {
@@ -10,7 +10,7 @@ export default class SelectedRestaurantComponent extends React.Component {
 
         this.state = {
             restaurant: null,
-        }
+        };
     }
 
     componentWillReceiveProps(props) {
@@ -29,29 +29,33 @@ export default class SelectedRestaurantComponent extends React.Component {
 
     render() {
         const restaurant = this.state.restaurant || this.props.restaurant;
-        const google_embed = `https://www.google.com/maps/embed/v1/place?q=${restaurant.name}&key=${GOOGLE_API_KEY}`
+        const googleName = encodeURIComponent(restaurant.name);
+        const googleEmbed = `https://www.google.com/maps/embed/v1/place?q=${googleName}&key=${GOOGLE_API_KEY}`;
 
         if (restaurant.photos == null) {
             restaurant.photos = [];
         }
         return (
             <div key="selected" className="column-flex selected">
-                <iframe
-                    width="600"
-                    height="450"
-                    frameBorder="0"
-                    style={{border: 0}}
-                    src={google_embed}
-                    allowFullScreen>
-                </iframe>
-                <Textfit mode="single" forceSingleModeWidth={false}>
-                    {restaurant.name}
-                </Textfit>
-                {restaurant.photos.forEach(photo => {
-                    return <img src={photo} />;
-                })}
-                <p>{restaurant.price} {restaurant.rating} {restaurant.review_count}</p>
-                <button onClick={this.props.startAgain}>Start Again</button>
+                <div className="selected__container column-flex">
+                    <iframe
+                        width="478"
+                        height="360"
+                        frameBorder="0"
+                        className="selected__google"
+                        style={{border: 0}}
+                        src={googleEmbed}
+                        allowFullScreen>
+                    </iframe>
+                    <Textfit mode="single" forceSingleModeWidth={false}>
+                        {restaurant.name}
+                    </Textfit>
+                    {restaurant.photos.forEach(photo => {
+                        return <img src={photo} />;
+                    })}
+                    <p>{restaurant.price} {restaurant.rating} {restaurant.review_count}</p>
+                    <button onClick={this.props.startAgain}>Start Again</button>
+                </div>
             </div>
         );
     }

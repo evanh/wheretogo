@@ -76,6 +76,19 @@
     }
 }
 
+.selected {
+    &__container {
+        @include shadow(1);
+        width: 480px;
+        border: 1px solid #979a9e;
+        border-radius: 10px;
+    }
+
+    &__google {
+        border-radius: 10px;
+    }
+}
+
 .relative-centered {
     top: 50%;
     left: 50%;

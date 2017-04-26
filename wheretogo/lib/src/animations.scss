@@ -54,6 +54,7 @@
 .spinner.default-leave {
     animation: grow-to-card 600ms 1;
     animation-timing-function: ease-in-out;
+    @include shadow(0);
 }
 
 @keyframes grow-to-card {
