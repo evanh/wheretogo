@@ -20,6 +20,7 @@ export default class RestaurantComponent extends React.Component {
         this.restaurantRejected = this.restaurantRejected.bind(this);
         this.categoryRejected = this.categoryRejected.bind(this);
         this.distanceRejected = this.distanceRejected.bind(this);
+        this.priceRejected = this.priceRejected.bind(this);
     }
 
     componentDidMount() {
@@ -66,6 +67,11 @@ export default class RestaurantComponent extends React.Component {
         this.props.distanceRejected(restaurant.distance);
     }
 
+    priceRejected(restaurant) {
+        this.restaurantFilter(r => r.price.length < restaurant.price.length);
+        this.props.restaurantFilter(restaurant.price);
+    }
+
     restaurantFilter(filterFn) {
         const filtered = this.state.restaurants.filter(filterFn);
         if (filtered.length === 0) {
@@ -80,6 +86,10 @@ export default class RestaurantComponent extends React.Component {
     }
 
     render() {
+        let priceButton = `${this.state.currentRestaurant.price} is too much`;
+        if (this.state.currentRestaurant.price == "") {
+            priceButton = `No price? No thanks`;
+        }
         return (
             <div className="row-flex restaurant">
                 <CSSTransitionGroup
@@ -88,6 +98,13 @@ export default class RestaurantComponent extends React.Component {
                     transitionLeaveTimeout={150}>
                     <div key={this.state.currentRestaurant.name} className="restaurant__container">
                         <div className="column-flex">
+                        <div className="restaurant__categories">
+                            {this.state.currentRestaurant.categories.map(c => {
+                                return <div key={c.alias} className="restaurant__category_tag">
+                                    <div>{c.title}</div>
+                                </div>;
+                            })}
+                        </div>
                         <div id="image-container" className="restaurant__img_container">
                             <img
                                 id="yelp-image"
@@ -101,8 +118,15 @@ export default class RestaurantComponent extends React.Component {
                             {this.state.currentRestaurant.name}?
                         </Textfit>
                         <hr className="restaurant__divider" />
+                        <Textfit
+                            mode="single"
+                            forceSingleModeWidth={false}
+                            className="restaurant__name">
+                            Price: {this.state.currentRestaurant.price || "?"}
+                        </Textfit>
+                        <hr className="restaurant__divider" />
                         <button
-                            className="restaurant__button"
+                            className="restaurant__button__yes"
                             onClick={this.props.restaurantSelected.bind(null, this.state.currentRestaurant)}>
                             Yes Please!
                         </button>
@@ -111,6 +135,11 @@ export default class RestaurantComponent extends React.Component {
                             className="restaurant__button"
                             onClick={this.restaurantRejected.bind(null, this.state.currentRestaurant)}>
                             Not this place today
+                        </button>
+                        <button
+                            className="restaurant__button"
+                            onClick={this.priceRejected.bind(null, this.state.currentRestaurant)}>
+                            {priceButton}
                         </button>
                         <button
                             className="restaurant__button"
@@ -139,4 +168,5 @@ RestaurantComponent.propTypes = {
     noValidRestaurants: React.PropTypes.func,
     categoryRejected: React.PropTypes.func,
     distanceRejected: React.PropTypes.func,
+    priceRejected: React.PropTypes.func,
 };

@@ -19,11 +19,12 @@
     margin: 10px;
 
     &__container {
-        @include shadow(1);
+        @include shadow(2);
         width: 300px;
         display: inline-block;
         border: 1px solid #979a9e;
         border-radius: 10px;
+        position: relative;
     }
 
     &__name {
@@ -44,7 +45,6 @@
     }
 
     &__img_container {
-        @include shadow(1);
         overflow: hidden;
         width: 300px;
         height: 300px;
@@ -53,22 +53,49 @@
         position: relative;
     }
 
-    &__button {
-        @include shadow(1);
+    &__categories {
+        position: absolute;
+        z-index: 1000;
+        left: 5px;
+        top: 240px;
+    }
+
+    &__category_tag {
+        @include shadow(3);
         @include color("light");
-        &__yes {
-            @include shadow(2);
-            @include color("dark");
-            &:hover {
-                @include shadow(4);
-            }
-        }
+        margin: 0px 3px 3px 0px;
+        border-radius: 0.5em;
+        border-width: 0.1em;
+        font-family: 'Helvetica Neue', Helvetica, sans-serif;
+        padding: 3px;
+        display: inline-block;
+    }
+
+    &__button {
+        @include shadow(2);
+        @include color("light");
         width: 95%;
         margin: 3px;
         border-radius: 0.5em;
         border-width: 0.1em;
+
         &:hover {
             @include shadow(3);
+        }
+        &:focus {
+            outline: none;
+        }
+    }
+
+    &__button__yes {
+        @include shadow(2);
+        @include color("dark");
+        margin: 3px;
+        border-radius: 0.5em;
+        border-width: 0.1em;
+
+        &:hover {
+            @include shadow(4);
         }
         &:focus {
             outline: none;
@@ -78,7 +105,7 @@
 
 .selected {
     &__container {
-        @include shadow(1);
+        @include shadow(2);
         width: 480px;
         border: 1px solid #979a9e;
         border-radius: 10px;
@@ -86,6 +113,18 @@
 
     &__google {
         border-radius: 10px;
+    }
+
+    &__button {
+        @include shadow(2);
+        @include color("dark");
+        margin: 3px;
+        &:hover {
+            @include shadow(3);
+        }
+        &:focus {
+            outline: none;
+        }
     }
 }
 

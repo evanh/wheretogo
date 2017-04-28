@@ -9,6 +9,8 @@ import RestaurantComponent from 'restaurantComponent.jsx';
 import SelectedRestaurant from 'selectedRestaurantComponent.jsx';
 import Spinner from 'spinner.jsx';
 
+import ImageCarouselComponent from 'imageCarouselComponent.jsx';
+
 import 'restaurant.scss';
 import 'animations.scss';
 
@@ -28,6 +30,7 @@ export default class Main extends React.Component {
             location: '',
             rejectedCategories: [],
             rejectedDistance: 2000,
+            rejectedPrice: "$$$$$$",
         };
 
         this.restaurantSelected = this.restaurantSelected.bind(this);
@@ -36,6 +39,7 @@ export default class Main extends React.Component {
         this.noMoreOptions = this.noMoreOptions.bind(this);
         this.addRejectedCategory = this.addRejectedCategory.bind(this);
         this.addRejectedDistance = this.addRejectedDistance.bind(this);
+        this.addRejectedPrice = this.addRejectedPrice.bind(this);
         this.restaurantRejected = this.restaurantRejected.bind(this);
     }
 
@@ -59,6 +63,12 @@ export default class Main extends React.Component {
                             return false;
                         }
                     }
+                }
+                if (b.price == null) {
+                    b.price = "";
+                }
+                if (b.price.length >= this.state.rejectedPrice.length) {
+                    return false;
                 }
                 return b.distance < this.state.rejectedDistance;
             });
@@ -143,6 +153,13 @@ export default class Main extends React.Component {
         });
     }
 
+    addRejectedPrice(price) {
+        this.setState({
+            rejectedPrice: price,
+            rejections: this.state.rejections + 1,
+        })
+    }
+
     restaurantRejected(restaurant) {
         console.log(restaurant.name);
         this.setState({
@@ -202,7 +219,11 @@ export default class Main extends React.Component {
                     startAgain={this.state.getStarted} />;
                 break;
         }
-
+        const test_images = [
+            "https://s3-media2.fl.yelpcdn.com/bphoto/fcZvc8toavnyLL6wsST0vg/o.jpg",
+            "https://s3-media3.fl.yelpcdn.com/bphoto/Io0WLohMHHKawsKDAwEdqg/o.jpg",
+            "https://s3-media3.fl.yelpcdn.com/bphoto/YtlKyh_0KOuPSbcoMdCeUw/o.jpg",
+        ];
         return (
             <div>
                 <CSSTransitionGroup

@@ -30934,6 +30934,10 @@
 	
 	var _spinner2 = _interopRequireDefault(_spinner);
 	
+	var _imageCarouselComponent = __webpack_require__(/*! imageCarouselComponent.jsx */ 569);
+	
+	var _imageCarouselComponent2 = _interopRequireDefault(_imageCarouselComponent);
+	
 	__webpack_require__(/*! restaurant.scss */ 563);
 	
 	__webpack_require__(/*! animations.scss */ 567);
@@ -30967,7 +30971,8 @@
 	            longitude: '',
 	            location: '',
 	            rejectedCategories: [],
-	            rejectedDistance: 2000
+	            rejectedDistance: 2000,
+	            rejectedPrice: "$$$$$$"
 	        };
 	
 	        _this.restaurantSelected = _this.restaurantSelected.bind(_this);
@@ -30976,6 +30981,7 @@
 	        _this.noMoreOptions = _this.noMoreOptions.bind(_this);
 	        _this.addRejectedCategory = _this.addRejectedCategory.bind(_this);
 	        _this.addRejectedDistance = _this.addRejectedDistance.bind(_this);
+	        _this.addRejectedPrice = _this.addRejectedPrice.bind(_this);
 	        _this.restaurantRejected = _this.restaurantRejected.bind(_this);
 	        return _this;
 	    }
@@ -31004,6 +31010,12 @@
 	                                return false;
 	                            }
 	                        }
+	                    }
+	                    if (b.price == null) {
+	                        b.price = "";
+	                    }
+	                    if (b.price.length >= _this2.state.rejectedPrice.length) {
+	                        return false;
 	                    }
 	                    return b.distance < _this2.state.rejectedDistance;
 	                });
@@ -31095,6 +31107,14 @@
 	            });
 	        }
 	    }, {
+	        key: 'addRejectedPrice',
+	        value: function addRejectedPrice(price) {
+	            this.setState({
+	                rejectedPrice: price,
+	                rejections: this.state.rejections + 1
+	            });
+	        }
+	    }, {
 	        key: 'restaurantRejected',
 	        value: function restaurantRejected(restaurant) {
 	            console.log(restaurant.name);
@@ -31156,7 +31176,7 @@
 	                        startAgain: this.state.getStarted });
 	                    break;
 	            }
-	
+	            var test_images = ["https://s3-media2.fl.yelpcdn.com/bphoto/fcZvc8toavnyLL6wsST0vg/o.jpg", "https://s3-media3.fl.yelpcdn.com/bphoto/Io0WLohMHHKawsKDAwEdqg/o.jpg", "https://s3-media3.fl.yelpcdn.com/bphoto/YtlKyh_0KOuPSbcoMdCeUw/o.jpg"];
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -35242,6 +35262,7 @@
 	        _this.restaurantRejected = _this.restaurantRejected.bind(_this);
 	        _this.categoryRejected = _this.categoryRejected.bind(_this);
 	        _this.distanceRejected = _this.distanceRejected.bind(_this);
+	        _this.priceRejected = _this.priceRejected.bind(_this);
 	        return _this;
 	    }
 	
@@ -35297,6 +35318,14 @@
 	            this.props.distanceRejected(restaurant.distance);
 	        }
 	    }, {
+	        key: 'priceRejected',
+	        value: function priceRejected(restaurant) {
+	            this.restaurantFilter(function (r) {
+	                return r.price.length < restaurant.price.length;
+	            });
+	            this.props.restaurantFilter(restaurant.price);
+	        }
+	    }, {
 	        key: 'restaurantFilter',
 	        value: function restaurantFilter(filterFn) {
 	            var filtered = this.state.restaurants.filter(filterFn);
@@ -35315,6 +35344,10 @@
 	        value: function render() {
 	            var _this2 = this;
 	
+	            var priceButton = this.state.currentRestaurant.price + ' is too much';
+	            if (this.state.currentRestaurant.price == "") {
+	                priceButton = 'No price? No thanks';
+	            }
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'row-flex restaurant' },
@@ -35330,6 +35363,21 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'column-flex' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'restaurant__categories' },
+	                                this.state.currentRestaurant.categories.map(function (c) {
+	                                    return _react2.default.createElement(
+	                                        'div',
+	                                        { key: c.alias, className: 'restaurant__category_tag' },
+	                                        _react2.default.createElement(
+	                                            'div',
+	                                            null,
+	                                            c.title
+	                                        )
+	                                    );
+	                                })
+	                            ),
 	                            _react2.default.createElement(
 	                                'div',
 	                                { id: 'image-container', className: 'restaurant__img_container' },
@@ -35349,9 +35397,19 @@
 	                            ),
 	                            _react2.default.createElement('hr', { className: 'restaurant__divider' }),
 	                            _react2.default.createElement(
+	                                _reactTextfit.Textfit,
+	                                {
+	                                    mode: 'single',
+	                                    forceSingleModeWidth: false,
+	                                    className: 'restaurant__name' },
+	                                'Price: ',
+	                                this.state.currentRestaurant.price || "?"
+	                            ),
+	                            _react2.default.createElement('hr', { className: 'restaurant__divider' }),
+	                            _react2.default.createElement(
 	                                'button',
 	                                {
-	                                    className: 'restaurant__button',
+	                                    className: 'restaurant__button__yes',
 	                                    onClick: this.props.restaurantSelected.bind(null, this.state.currentRestaurant) },
 	                                'Yes Please!'
 	                            ),
@@ -35362,6 +35420,13 @@
 	                                    className: 'restaurant__button',
 	                                    onClick: this.restaurantRejected.bind(null, this.state.currentRestaurant) },
 	                                'Not this place today'
+	                            ),
+	                            _react2.default.createElement(
+	                                'button',
+	                                {
+	                                    className: 'restaurant__button',
+	                                    onClick: this.priceRejected.bind(null, this.state.currentRestaurant) },
+	                                priceButton
 	                            ),
 	                            _react2.default.createElement(
 	                                'button',
@@ -35401,7 +35466,8 @@
 	    restaurantSelected: _react2.default.PropTypes.func,
 	    noValidRestaurants: _react2.default.PropTypes.func,
 	    categoryRejected: _react2.default.PropTypes.func,
-	    distanceRejected: _react2.default.PropTypes.func
+	    distanceRejected: _react2.default.PropTypes.func,
+	    priceRejected: _react2.default.PropTypes.func
 	};
 
 /***/ },
@@ -36003,9 +36069,8 @@
 	            var restaurant = this.state.restaurant || this.props.restaurant;
 	            var googleName = encodeURIComponent(restaurant.name);
 	            var googleEmbed = 'https://www.google.com/maps/embed/v1/place?q=' + googleName + '&key=' + GOOGLE_API_KEY;
-	
 	            if (restaurant.photos == null) {
-	                restaurant.photos = [];
+	                restaurant.photos = [restaurant.image_url];
 	            }
 	            return _react2.default.createElement(
 	                'div',
@@ -36021,26 +36086,21 @@
 	                        style: { border: 0 },
 	                        src: googleEmbed,
 	                        allowFullScreen: true }),
+	                    _react2.default.createElement('hr', { className: 'restaurant__divider' }),
 	                    _react2.default.createElement(
 	                        _reactTextfit.Textfit,
-	                        { mode: 'single', forceSingleModeWidth: false },
+	                        {
+	                            mode: 'single',
+	                            forceSingleModeWidth: false,
+	                            className: 'restaurant__name' },
 	                        restaurant.name
 	                    ),
-	                    restaurant.photos.forEach(function (photo) {
-	                        return _react2.default.createElement('img', { src: photo });
-	                    }),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        restaurant.price,
-	                        ' ',
-	                        restaurant.rating,
-	                        ' ',
-	                        restaurant.review_count
-	                    ),
+	                    _react2.default.createElement('hr', { className: 'restaurant__divider' }),
 	                    _react2.default.createElement(
 	                        'button',
-	                        { onClick: this.props.startAgain },
+	                        {
+	                            className: 'action-button selected__button',
+	                            onClick: this.props.startAgain },
 	                        'Start Again'
 	                    )
 	                )
@@ -36151,7 +36211,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".spinner {\n  background: #3849aa;\n  color: #ffffff;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  width: 54px;\n  height: 54px;\n  animation-delay: 150ms;\n  animation: spinner 1s infinite; }\n\n@keyframes spinner {\n  0% {\n    border-radius: 100%; } }\n\n.start-button.default-leave {\n  transform-origin: left top;\n  animation: shrink 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes shrink {\n  10% {\n    color: #3849aa;\n    border-radius: 0px; }\n  80% {\n    opacity: 1; }\n  100% {\n    transform: translate(-2%, -5%) scale(0.07, 0.27);\n    z-index: -1;\n    opacity: 0;\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); } }\n\n.spinner.default-enter {\n  transform-origin: left top;\n  animation: grow 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow {\n  0% {\n    transform: scale(0.01, 0.1); } }\n\n.spinner.default-leave {\n  animation: grow-to-card 600ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow-to-card {\n  100% {\n    transform: translate(-27px, -123px) scale(5.55, 9.15);\n    border-radius: 2px;\n    opacity: 0;\n    z-index: -1;\n    background-color: #f8f8f8; } }\n\n.restaurant.default-enter {\n  animation: card-enter 600ms 1; }\n\n@keyframes card-enter {\n  0% {\n    opacity: 0; }\n  66% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n.restaurant__container.restaurant-cycle-enter {\n  animation: card-onscreen 200ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes card-onscreen {\n  0% {\n    transform: translateX(100vw); }\n  100% {\n    transform: translateX(50%); } }\n\n.restaurant__container.restaurant-cycle-leave {\n  animation: card-offscreen 200ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes card-offscreen {\n  0% {\n    transform: translateX(-50%); }\n  100% {\n    transform: translateX(-100vw); } }\n\n.column-flex {\n  flex-flow: column nowrap;\n  justify-content: center;\n  align-items: center;\n  display: flex; }\n\n.row-flex {\n  flex-flow: row nowrap;\n  justify-content: center;\n  align-items: center;\n  display: flex; }\n\n.restaurant {\n  margin: 10px; }\n  .restaurant__container {\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n    width: 300px;\n    display: inline-block;\n    border: 1px solid #979a9e;\n    border-radius: 10px; }\n  .restaurant__name {\n    width: 100%;\n    margin: 0px;\n    text-align: center;\n    padding: 5px;\n    color: #252526; }\n  .restaurant__divider {\n    margin-top: 3px;\n    margin-bottom: 3px;\n    border: 2px;\n    border-top: 1px solid #979a9e;\n    background: #979a9e;\n    width: 100%; }\n  .restaurant__img_container {\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n    overflow: hidden;\n    width: 300px;\n    height: 300px;\n    margin: 0px 0px 5px 0px;\n    border-radius: 8px;\n    position: relative; }\n  .restaurant__button {\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n    background: #6e74dc;\n    color: #000000;\n    width: 95%;\n    margin: 3px;\n    border-radius: 0.5em;\n    border-width: 0.1em; }\n    .restaurant__button__yes {\n      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);\n      background: #00277a;\n      color: #ffffff; }\n      .restaurant__button__yes:hover {\n        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n    .restaurant__button:hover {\n      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23); }\n    .restaurant__button:focus {\n      outline: none; }\n\n.selected__container {\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  width: 480px;\n  border: 1px solid #979a9e;\n  border-radius: 10px; }\n\n.selected__google {\n  border-radius: 10px; }\n\n.relative-centered {\n  top: 50%;\n  left: 50%;\n  position: absolute;\n  -webkit-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%); }\n\n.action-button {\n  transition: 0.15s ease-out;\n  font-family: 'Helvetica Neue', Helvetica, sans-serif;\n  padding: .78571429em 1.5em .78571429em;\n  line-height: 1em;\n  font-style: normal;\n  text-align: center;\n  border-radius: 0.5em;\n  border-width: 0em; }\n\n.started__button {\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  background: #3849aa;\n  color: #ffffff;\n  font-size: 2em;\n  font-weight: 700; }\n  .started__button:hover {\n    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23); }\n  .started__button:focus {\n    outline: none; }\n", ""]);
+	exports.push([module.id, ".spinner {\n  background: #3849aa;\n  color: #ffffff;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  width: 54px;\n  height: 54px;\n  animation-delay: 150ms;\n  animation: spinner 1s infinite; }\n\n@keyframes spinner {\n  0% {\n    border-radius: 100%; } }\n\n.start-button.default-leave {\n  transform-origin: left top;\n  animation: shrink 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes shrink {\n  10% {\n    color: #3849aa;\n    border-radius: 0px; }\n  80% {\n    opacity: 1; }\n  100% {\n    transform: translate(-2%, -5%) scale(0.07, 0.27);\n    z-index: -1;\n    opacity: 0;\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); } }\n\n.spinner.default-enter {\n  transform-origin: left top;\n  animation: grow 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow {\n  0% {\n    transform: scale(0.01, 0.1); } }\n\n.spinner.default-leave {\n  animation: grow-to-card 600ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow-to-card {\n  100% {\n    transform: translate(-27px, -123px) scale(5.55, 9.15);\n    border-radius: 2px;\n    opacity: 0;\n    z-index: -1;\n    background-color: #f8f8f8; } }\n\n.restaurant.default-enter {\n  animation: card-enter 600ms 1; }\n\n@keyframes card-enter {\n  0% {\n    opacity: 0; }\n  66% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n.restaurant__container.restaurant-cycle-enter {\n  animation: card-onscreen 200ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes card-onscreen {\n  0% {\n    transform: translateX(100vw); }\n  100% {\n    transform: translateX(50%); } }\n\n.restaurant__container.restaurant-cycle-leave {\n  animation: card-offscreen 200ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes card-offscreen {\n  0% {\n    transform: translateX(-50%); }\n  100% {\n    transform: translateX(-100vw); } }\n\n.column-flex {\n  flex-flow: column nowrap;\n  justify-content: center;\n  align-items: center;\n  display: flex; }\n\n.row-flex {\n  flex-flow: row nowrap;\n  justify-content: center;\n  align-items: center;\n  display: flex; }\n\n.restaurant {\n  margin: 10px; }\n  .restaurant__container {\n    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);\n    width: 300px;\n    display: inline-block;\n    border: 1px solid #979a9e;\n    border-radius: 10px;\n    position: relative; }\n  .restaurant__name {\n    width: 100%;\n    margin: 0px;\n    text-align: center;\n    padding: 5px;\n    color: #252526; }\n  .restaurant__divider {\n    margin-top: 3px;\n    margin-bottom: 3px;\n    border: 2px;\n    border-top: 1px solid #979a9e;\n    background: #979a9e;\n    width: 100%; }\n  .restaurant__img_container {\n    overflow: hidden;\n    width: 300px;\n    height: 300px;\n    margin: 0px 0px 5px 0px;\n    border-radius: 8px;\n    position: relative; }\n  .restaurant__categories {\n    position: absolute;\n    z-index: 1000;\n    left: 5px;\n    top: 240px; }\n  .restaurant__category_tag {\n    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);\n    background: #6e74dc;\n    color: #000000;\n    margin: 0px 3px 3px 0px;\n    border-radius: 0.5em;\n    border-width: 0.1em;\n    font-family: 'Helvetica Neue', Helvetica, sans-serif;\n    padding: 3px;\n    display: inline-block; }\n  .restaurant__button {\n    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);\n    background: #6e74dc;\n    color: #000000;\n    width: 95%;\n    margin: 3px;\n    border-radius: 0.5em;\n    border-width: 0.1em; }\n    .restaurant__button:hover {\n      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23); }\n    .restaurant__button:focus {\n      outline: none; }\n  .restaurant__button__yes {\n    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);\n    background: #00277a;\n    color: #ffffff;\n    margin: 3px;\n    border-radius: 0.5em;\n    border-width: 0.1em; }\n    .restaurant__button__yes:hover {\n      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n    .restaurant__button__yes:focus {\n      outline: none; }\n\n.selected__container {\n  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);\n  width: 480px;\n  border: 1px solid #979a9e;\n  border-radius: 10px; }\n\n.selected__google {\n  border-radius: 10px; }\n\n.selected__button {\n  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);\n  background: #00277a;\n  color: #ffffff;\n  margin: 3px; }\n  .selected__button:hover {\n    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23); }\n  .selected__button:focus {\n    outline: none; }\n\n.relative-centered {\n  top: 50%;\n  left: 50%;\n  position: absolute;\n  -webkit-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%); }\n\n.action-button {\n  transition: 0.15s ease-out;\n  font-family: 'Helvetica Neue', Helvetica, sans-serif;\n  padding: .78571429em 1.5em .78571429em;\n  line-height: 1em;\n  font-style: normal;\n  text-align: center;\n  border-radius: 0.5em;\n  border-width: 0em; }\n\n.started__button {\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  background: #3849aa;\n  color: #ffffff;\n  font-size: 2em;\n  font-weight: 700; }\n  .started__button:hover {\n    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23); }\n  .started__button:focus {\n    outline: none; }\n", ""]);
 	
 	// exports
 
@@ -36512,6 +36572,155 @@
 	
 	// module
 	exports.push([module.id, ".spinner {\n  background: #3849aa;\n  color: #ffffff;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n  width: 54px;\n  height: 54px;\n  animation-delay: 150ms;\n  animation: spinner 1s infinite; }\n\n@keyframes spinner {\n  0% {\n    border-radius: 100%; } }\n\n.start-button.default-leave {\n  transform-origin: left top;\n  animation: shrink 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes shrink {\n  10% {\n    color: #3849aa;\n    border-radius: 0px; }\n  80% {\n    opacity: 1; }\n  100% {\n    transform: translate(-2%, -5%) scale(0.07, 0.27);\n    z-index: -1;\n    opacity: 0;\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); } }\n\n.spinner.default-enter {\n  transform-origin: left top;\n  animation: grow 150ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow {\n  0% {\n    transform: scale(0.01, 0.1); } }\n\n.spinner.default-leave {\n  animation: grow-to-card 600ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes grow-to-card {\n  100% {\n    transform: translate(-27px, -123px) scale(5.55, 9.15);\n    border-radius: 2px;\n    opacity: 0;\n    z-index: -1;\n    background-color: #f8f8f8; } }\n\n.restaurant.default-enter {\n  animation: card-enter 600ms 1; }\n\n@keyframes card-enter {\n  0% {\n    opacity: 0; }\n  66% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n.restaurant__container.restaurant-cycle-enter {\n  animation: card-onscreen 200ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes card-onscreen {\n  0% {\n    transform: translateX(100vw); }\n  100% {\n    transform: translateX(50%); } }\n\n.restaurant__container.restaurant-cycle-leave {\n  animation: card-offscreen 200ms 1;\n  animation-timing-function: ease-in-out; }\n\n@keyframes card-offscreen {\n  0% {\n    transform: translateX(-50%); }\n  100% {\n    transform: translateX(-100vw); } }\n", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 569 */
+/*!************************************!*\
+  !*** ./imageCarouselComponent.jsx ***!
+  \************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _CSSTransitionGroup = __webpack_require__(/*! react-transition-group/CSSTransitionGroup */ 538);
+	
+	var _CSSTransitionGroup2 = _interopRequireDefault(_CSSTransitionGroup);
+	
+	__webpack_require__(/*! image-carousel.scss */ 570);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var ImageCarouselComponent = function (_React$Component) {
+	    _inherits(ImageCarouselComponent, _React$Component);
+	
+	    function ImageCarouselComponent(props) {
+	        _classCallCheck(this, ImageCarouselComponent);
+	
+	        var _this = _possibleConstructorReturn(this, (ImageCarouselComponent.__proto__ || Object.getPrototypeOf(ImageCarouselComponent)).call(this, props));
+	
+	        _this.state = {
+	            index: 0
+	        };
+	
+	        _this.changeIndex = _this.changeIndex.bind(_this);
+	        return _this;
+	    }
+	
+	    _createClass(ImageCarouselComponent, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var $img = $('#carousel-image');
+	            $img.on('load', function () {
+	                // Reset height and width so it can be scaled correctly
+	                if (this.naturalWidth < this.naturalHeight) {
+	                    $img.width(300);
+	                    $img.height(''); // These stay set from load to load, so need to unset them
+	                } else {
+	
+	                    $img.height(300);
+	                    $img.width('');
+	                }
+	            });
+	        }
+	    }, {
+	        key: 'changeIndex',
+	        value: function changeIndex() {
+	            this.setState({
+	                index: this.state.index + 1
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                this.props.images.map(function (i, idx) {
+	                    return _react2.default.createElement(
+	                        'div',
+	                        { id: 'image-container', className: 'img_container' },
+	                        _react2.default.createElement('img', {
+	                            id: "carousel-image" + idx,
+	                            className: 'relative-centered',
+	                            src: i })
+	                    );
+	                })
+	            );
+	        }
+	    }]);
+	
+	    return ImageCarouselComponent;
+	}(_react2.default.Component);
+	
+	exports.default = ImageCarouselComponent;
+	
+	
+	ImageCarouselComponent.propTypes = {
+	    rotateTime: _react2.default.PropTypes.number,
+	    images: _react2.default.PropTypes.array
+	};
+
+/***/ },
+/* 570 */
+/*!*****************************!*\
+  !*** ./image-carousel.scss ***!
+  \*****************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(/*! !./../~/css-loader!./../~/sass-loader/lib/loader.js!./image-carousel.scss */ 571);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(/*! ./../~/style-loader/addStyles.js */ 566)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/lib/loader.js!./image-carousel.scss", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/lib/loader.js!./image-carousel.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 571 */
+/*!****************************************************************************!*\
+  !*** ../~/css-loader!../~/sass-loader/lib/loader.js!./image-carousel.scss ***!
+  \****************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(/*! ./../~/css-loader/lib/css-base.js */ 565)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".img_container {\n  overflow: hidden;\n  width: 300px;\n  height: 300px;\n  margin: 0px 0px 5px 0px;\n  border-radius: 8px;\n  position: relative;\n  display: inline; }\n", ""]);
 	
 	// exports
 

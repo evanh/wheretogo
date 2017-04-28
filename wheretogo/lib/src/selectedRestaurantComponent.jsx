@@ -31,9 +31,8 @@ export default class SelectedRestaurantComponent extends React.Component {
         const restaurant = this.state.restaurant || this.props.restaurant;
         const googleName = encodeURIComponent(restaurant.name);
         const googleEmbed = `https://www.google.com/maps/embed/v1/place?q=${googleName}&key=${GOOGLE_API_KEY}`;
-
         if (restaurant.photos == null) {
-            restaurant.photos = [];
+            restaurant.photos = [restaurant.image_url];
         }
         return (
             <div key="selected" className="column-flex selected">
@@ -47,14 +46,19 @@ export default class SelectedRestaurantComponent extends React.Component {
                         src={googleEmbed}
                         allowFullScreen>
                     </iframe>
-                    <Textfit mode="single" forceSingleModeWidth={false}>
+                    <hr className="restaurant__divider" />
+                    <Textfit
+                        mode="single"
+                        forceSingleModeWidth={false}
+                        className="restaurant__name">
                         {restaurant.name}
                     </Textfit>
-                    {restaurant.photos.forEach(photo => {
-                        return <img src={photo} />;
-                    })}
-                    <p>{restaurant.price} {restaurant.rating} {restaurant.review_count}</p>
-                    <button onClick={this.props.startAgain}>Start Again</button>
+                    <hr className="restaurant__divider" />
+                    <button
+                        className="action-button selected__button"
+                        onClick={this.props.startAgain}>
+                        Start Again
+                    </button>
                 </div>
             </div>
         );
