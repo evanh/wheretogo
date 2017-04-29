@@ -24,7 +24,6 @@
         display: inline-block;
         border: 1px solid #979a9e;
         border-radius: 10px;
-        position: relative;
     }
 
     &__name {
@@ -57,7 +56,7 @@
         position: absolute;
         z-index: 1000;
         left: 5px;
-        top: 240px;
+        bottom: 10px;
     }
 
     &__category_tag {

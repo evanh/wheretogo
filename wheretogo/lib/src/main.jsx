@@ -130,7 +130,6 @@ export default class Main extends React.Component {
             console.log('NO LOCATION DATA');
             return;
         }
-
         this.setState({status: 'getting_location'});
     }
 
@@ -211,12 +210,12 @@ export default class Main extends React.Component {
                 break;
             case 'selected':
                 animation = 'detail';
-                animationEnterTimeout = 5000;
-                animationLeaveTimeout = 5000;
+                animationEnterTimeout = 500;
+                animationLeaveTimeout = 500;
                 component = <SelectedRestaurant
                     key="detail"
                     restaurant={this.state.selectedRestaurant}
-                    startAgain={this.state.getStarted} />;
+                    startAgain={this.getStarted} />;
                 break;
         }
         const test_images = [
@@ -224,8 +223,9 @@ export default class Main extends React.Component {
             "https://s3-media3.fl.yelpcdn.com/bphoto/Io0WLohMHHKawsKDAwEdqg/o.jpg",
             "https://s3-media3.fl.yelpcdn.com/bphoto/YtlKyh_0KOuPSbcoMdCeUw/o.jpg",
         ];
+        console.log(animation, animationEnterTimeout)
         return (
-            <div>
+            <div style={{position: "relative"}}>
                 <CSSTransitionGroup
                     transitionName={animation}
                     transitionEnterTimeout={animationEnterTimeout}

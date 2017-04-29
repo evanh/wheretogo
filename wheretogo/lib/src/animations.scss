@@ -35,7 +35,7 @@
         transform: translate(-2%, -5%) scale(0.07, 0.27);
         z-index: -1;
         opacity: 0;
-        @include shadow(1);
+        @include shadow(2);
     }
 }
 
@@ -54,7 +54,7 @@
 .spinner.default-leave {
     animation: grow-to-card 600ms 1;
     animation-timing-function: ease-in-out;
-    @include shadow(0);
+    @include shadow(2);
 }
 
 @keyframes grow-to-card {
@@ -62,7 +62,6 @@
         transform: translate(-27px, -123px) scale(5.55, 9.15);
         border-radius: 2px;
         opacity: 0;
-        z-index: -1;
         background-color: #f8f8f8;
     }
 }
@@ -110,3 +109,64 @@
         transform: translateX(-100vw);
     }
 }
+
+.restaurant.detail-leave {
+    top: 0px;
+    left: 50%;
+    position: absolute;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.restaurant.detail-leave .restaurant__container {
+    animation: card-expand 600ms 1;
+}
+
+.restaurant.detail-leave .restaurant__inner_container {
+    opacity: 0;
+}
+
+@keyframes card-expand {
+    0% {
+        width: 300px;
+        height: 590px;
+    }
+    100% {
+        width: 480px;
+        height: 450px;
+    }
+}
+
+.selected.detail-enter {
+    opacity: 0;
+}
+
+.selected.default-leave {
+    @include shadow(2);
+    left: 50%;
+    position: absolute;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    transform-origin: left bottom;
+    animation: detail-shrink 150ms 1
+}
+
+.selected.default-leave .selected__container {
+    opacity: 0;
+}
+
+@keyframes detail-shrink {
+    10% {
+        border-radius: 0px;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-4%, -16%) scale(0.05512, 0.06);
+        z-index: -1;
+        opacity: 0;
+        @include color("primary");
+    }}
