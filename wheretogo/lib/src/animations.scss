@@ -42,6 +42,16 @@
     @include shadow(2);
 }
 
+.spinner.default-leave .spinner__cell {
+    animation: fade-out 600ms 1;
+}
+
+@keyframes fade-out {
+    100% {
+        background-color: #f8f8f8;
+    }
+}
+
 @keyframes grow-to-card {
     100% {
         transform: translate(-27px, -123px) scale(5.55, 9.15);
