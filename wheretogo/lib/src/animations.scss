@@ -1,20 +1,5 @@
 @import 'material-resources';
 
-.spinner {
-    @include color("primary");
-    @include shadow(1);
-    width: 54px;
-    height: 54px;
-    animation-delay: 150ms;
-    animation: spinner 1s infinite;
-}
-
-@keyframes spinner {
-    0% {
-        border-radius: 100%;
-    }
-}
-
 .start-button.default-leave {
     transform-origin: left top;
     animation: shrink 150ms 1;

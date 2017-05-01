@@ -218,12 +218,7 @@ export default class Main extends React.Component {
                     startAgain={this.getStarted} />;
                 break;
         }
-        const test_images = [
-            "https://s3-media2.fl.yelpcdn.com/bphoto/fcZvc8toavnyLL6wsST0vg/o.jpg",
-            "https://s3-media3.fl.yelpcdn.com/bphoto/Io0WLohMHHKawsKDAwEdqg/o.jpg",
-            "https://s3-media3.fl.yelpcdn.com/bphoto/YtlKyh_0KOuPSbcoMdCeUw/o.jpg",
-        ];
-        console.log(animation, animationEnterTimeout)
+
         return (
             <div style={{position: "relative"}}>
                 <CSSTransitionGroup
