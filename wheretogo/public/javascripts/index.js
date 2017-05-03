@@ -35268,6 +35268,16 @@
 	    _createClass(RestaurantComponent, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
+	            this.setImageSize();
+	        }
+	    }, {
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate() {
+	            this.setImageSize();
+	        }
+	    }, {
+	        key: 'setImageSize',
+	        value: function setImageSize() {
 	            var $img = $('#yelp-image');
 	            $img.on('load', function () {
 	                // Reset height and width so it can be scaled correctly
@@ -35344,7 +35354,7 @@
 	            var _this2 = this;
 	
 	            var priceButton = this.state.currentRestaurant.price + ' is too much';
-	            if (this.state.currentRestaurant.price == "") {
+	            if (this.state.currentRestaurant.price === '') {
 	                priceButton = 'No price? No thanks';
 	            }
 	            return _react2.default.createElement(
@@ -35364,7 +35374,7 @@
 	                            { className: 'column-flex restaurant__inner_container' },
 	                            _react2.default.createElement(
 	                                'div',
-	                                { style: { position: "relative" } },
+	                                { style: { position: 'relative' } },
 	                                _react2.default.createElement(
 	                                    'div',
 	                                    { className: 'restaurant__categories' },
@@ -35406,7 +35416,7 @@
 	                                    forceSingleModeWidth: false,
 	                                    className: 'restaurant__name' },
 	                                'Price: ',
-	                                this.state.currentRestaurant.price || "?"
+	                                this.state.currentRestaurant.price || '?'
 	                            ),
 	                            _react2.default.createElement('hr', { className: 'restaurant__divider' }),
 	                            _react2.default.createElement(
@@ -35470,7 +35480,9 @@
 	    noValidRestaurants: _react2.default.PropTypes.func,
 	    categoryRejected: _react2.default.PropTypes.func,
 	    distanceRejected: _react2.default.PropTypes.func,
-	    priceRejected: _react2.default.PropTypes.func
+	    priceRejected: _react2.default.PropTypes.func,
+	    restaurantRejected: _react2.default.PropTypes.func,
+	    restaurantFilter: _react2.default.PropTypes.func
 	};
 
 /***/ },

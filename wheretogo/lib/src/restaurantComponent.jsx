@@ -24,6 +24,14 @@ export default class RestaurantComponent extends React.Component {
     }
 
     componentDidMount() {
+        this.setImageSize();
+    }
+
+    componentDidUpdate() {
+        this.setImageSize();
+    }
+
+    setImageSize() {
         const $img = $('#yelp-image');
         $img.on('load', function() {
             // Reset height and width so it can be scaled correctly
@@ -87,8 +95,8 @@ export default class RestaurantComponent extends React.Component {
 
     render() {
         let priceButton = `${this.state.currentRestaurant.price} is too much`;
-        if (this.state.currentRestaurant.price == "") {
-            priceButton = `No price? No thanks`;
+        if (this.state.currentRestaurant.price === '') {
+            priceButton = 'No price? No thanks';
         }
         return (
             <div className="row-flex restaurant">
@@ -98,7 +106,7 @@ export default class RestaurantComponent extends React.Component {
                     transitionLeaveTimeout={150}>
                     <div key={this.state.currentRestaurant.name} className="restaurant__container">
                         <div className="column-flex restaurant__inner_container">
-                            <div style={{position: "relative"}}>
+                            <div style={{position: 'relative'}}>
                                 <div className="restaurant__categories">
                                     {this.state.currentRestaurant.categories.map(c => {
                                         return <div key={c.alias} className="restaurant__category_tag">
@@ -124,7 +132,7 @@ export default class RestaurantComponent extends React.Component {
                                 mode="single"
                                 forceSingleModeWidth={false}
                                 className="restaurant__name">
-                                Price: {this.state.currentRestaurant.price || "?"}
+                                Price: {this.state.currentRestaurant.price || '?'}
                             </Textfit>
                             <hr className="restaurant__divider" />
                             <button
@@ -171,4 +179,6 @@ RestaurantComponent.propTypes = {
     categoryRejected: React.PropTypes.func,
     distanceRejected: React.PropTypes.func,
     priceRejected: React.PropTypes.func,
+    restaurantRejected: React.PropTypes.func,
+    restaurantFilter: React.PropTypes.func,
 };
