@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 // const lessMiddleware = require("less-middleware");
 
 const index = require('./routes/index');
-const restaurantHandler = require("./lib/restaurantHandler");
+const restaurantHandler = require('./lib/restaurantHandler');
 
 const app = express();
 
