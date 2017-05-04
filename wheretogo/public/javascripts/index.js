@@ -35266,32 +35266,6 @@
 	    }
 	
 	    _createClass(RestaurantComponent, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            this.setImageSize();
-	        }
-	    }, {
-	        key: 'componentDidUpdate',
-	        value: function componentDidUpdate() {
-	            this.setImageSize();
-	        }
-	    }, {
-	        key: 'setImageSize',
-	        value: function setImageSize() {
-	            var $img = $('#yelp-image');
-	            $img.on('load', function () {
-	                // Reset height and width so it can be scaled correctly
-	                if (this.naturalWidth < this.naturalHeight) {
-	                    $img.width(300);
-	                    $img.height(''); // These stay set from load to load, so need to unset them
-	                } else {
-	
-	                    $img.height(300);
-	                    $img.width('');
-	                }
-	            });
-	        }
-	    }, {
 	        key: 'restaurantSelected',
 	        value: function restaurantSelected() {
 	            // maybe an animation or something
