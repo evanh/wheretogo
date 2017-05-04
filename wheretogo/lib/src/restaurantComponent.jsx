@@ -114,11 +114,10 @@ export default class RestaurantComponent extends React.Component {
                                         </div>;
                                     })}
                                 </div>
-                                <div id="image-container" className="restaurant__img_container">
-                                    <img
-                                        id="yelp-image"
-                                        className="relative-centered"
-                                        src={this.state.currentRestaurant.image_url} />
+                                <div
+                                    id="image-container"
+                                    className="restaurant__img_container"
+                                    style={{"background-image": `url(${this.state.currentRestaurant.image_url})`}}>
                                 </div>
                             </div>
                             <Textfit
