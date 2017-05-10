@@ -9,8 +9,6 @@ import RestaurantComponent from 'restaurantComponent.jsx';
 import SelectedRestaurant from 'selectedRestaurantComponent.jsx';
 import Spinner from 'spinner.jsx';
 
-import ImageCarouselComponent from 'imageCarouselComponent.jsx';
-
 import 'restaurant.scss';
 import 'animations.scss';
 
@@ -30,7 +28,7 @@ export default class Main extends React.Component {
             location: '',
             rejectedCategories: [],
             rejectedDistance: 2000,
-            rejectedPrice: "$$$$$$",
+            rejectedPrice: '$$$$$$',
         };
 
         this.restaurantSelected = this.restaurantSelected.bind(this);
@@ -65,7 +63,7 @@ export default class Main extends React.Component {
                     }
                 }
                 if (b.price == null) {
-                    b.price = "";
+                    b.price = '';
                 }
                 if (b.price.length >= this.state.rejectedPrice.length) {
                     return false;
@@ -156,7 +154,7 @@ export default class Main extends React.Component {
         this.setState({
             rejectedPrice: price,
             rejections: this.state.rejections + 1,
-        })
+        });
     }
 
     restaurantRejected(restaurant) {
@@ -189,7 +187,7 @@ export default class Main extends React.Component {
                 animation = 'default';
                 animationEnterTimeout = 100;
                 animationLeaveTimeout = 100;
-                component = <Spinner />
+                component = <Spinner />;
                 break;
             case 'in_use':
                 // TODO: Need to track current restaurant so we can switch
@@ -220,7 +218,7 @@ export default class Main extends React.Component {
         }
 
         return (
-            <div style={{position: "relative"}}>
+            <div style={{position: 'relative'}}>
                 <CSSTransitionGroup
                     transitionName={animation}
                     transitionEnterTimeout={animationEnterTimeout}

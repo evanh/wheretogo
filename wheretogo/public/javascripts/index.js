@@ -30934,10 +30934,6 @@
 	
 	var _spinner2 = _interopRequireDefault(_spinner);
 	
-	var _imageCarouselComponent = __webpack_require__(/*! imageCarouselComponent.jsx */ 567);
-	
-	var _imageCarouselComponent2 = _interopRequireDefault(_imageCarouselComponent);
-	
 	__webpack_require__(/*! restaurant.scss */ 570);
 	
 	__webpack_require__(/*! animations.scss */ 572);
@@ -30972,7 +30968,7 @@
 	            location: '',
 	            rejectedCategories: [],
 	            rejectedDistance: 2000,
-	            rejectedPrice: "$$$$$$"
+	            rejectedPrice: '$$$$$$'
 	        };
 	
 	        _this.restaurantSelected = _this.restaurantSelected.bind(_this);
@@ -31012,7 +31008,7 @@
 	                        }
 	                    }
 	                    if (b.price == null) {
-	                        b.price = "";
+	                        b.price = '';
 	                    }
 	                    if (b.price.length >= _this2.state.rejectedPrice.length) {
 	                        return false;
@@ -31178,7 +31174,7 @@
 	
 	            return _react2.default.createElement(
 	                'div',
-	                { style: { position: "relative" } },
+	                { style: { position: 'relative' } },
 	                _react2.default.createElement(
 	                    _CSSTransitionGroup2.default,
 	                    {
@@ -36526,161 +36522,9 @@
 
 
 /***/ },
-/* 567 */
-/*!************************************!*\
-  !*** ./imageCarouselComponent.jsx ***!
-  \************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _CSSTransitionGroup = __webpack_require__(/*! react-transition-group/CSSTransitionGroup */ 538);
-	
-	var _CSSTransitionGroup2 = _interopRequireDefault(_CSSTransitionGroup);
-	
-	__webpack_require__(/*! image-carousel.scss */ 568);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var ImageCarouselComponent = function (_React$Component) {
-	    _inherits(ImageCarouselComponent, _React$Component);
-	
-	    function ImageCarouselComponent(props) {
-	        _classCallCheck(this, ImageCarouselComponent);
-	
-	        var _this = _possibleConstructorReturn(this, (ImageCarouselComponent.__proto__ || Object.getPrototypeOf(ImageCarouselComponent)).call(this, props));
-	
-	        _this.state = {
-	            index: 0
-	        };
-	
-	        _this.changeIndex = _this.changeIndex.bind(_this);
-	        return _this;
-	    }
-	
-	    _createClass(ImageCarouselComponent, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var _loop = function _loop(i) {
-	                var $img = $('#carousel-image');
-	                $img.on('load', function () {
-	                    // Reset height and width so it can be scaled correctly
-	                    if (this.naturalWidth < this.naturalHeight) {
-	                        $img.width(300);
-	                        $img.height(''); // These stay set from load to load, so need to unset them
-	                    } else {
-	
-	                        $img.height(300);
-	                        $img.width('');
-	                    }
-	                });
-	            };
-	
-	            for (var i = 0; i < this.props.images.length; i++) {
-	                _loop(i);
-	            }
-	        }
-	    }, {
-	        key: 'changeIndex',
-	        value: function changeIndex() {
-	            this.setState({
-	                index: this.state.index + 1
-	            });
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                this.props.images.map(function (i, idx) {
-	                    return _react2.default.createElement(
-	                        'div',
-	                        { id: 'image-container', className: 'img_container' },
-	                        _react2.default.createElement('img', {
-	                            id: "carousel-image" + idx,
-	                            className: 'relative-centered',
-	                            src: i })
-	                    );
-	                })
-	            );
-	        }
-	    }]);
-	
-	    return ImageCarouselComponent;
-	}(_react2.default.Component);
-	
-	exports.default = ImageCarouselComponent;
-	
-	
-	ImageCarouselComponent.propTypes = {
-	    rotateTime: _react2.default.PropTypes.number,
-	    images: _react2.default.PropTypes.array
-	};
-
-/***/ },
-/* 568 */
-/*!*****************************!*\
-  !*** ./image-carousel.scss ***!
-  \*****************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(/*! !./../~/css-loader!./../~/sass-loader/lib/loader.js!./image-carousel.scss */ 569);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../~/style-loader/addStyles.js */ 566)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/lib/loader.js!./image-carousel.scss", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/lib/loader.js!./image-carousel.scss");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 569 */
-/*!****************************************************************************!*\
-  !*** ../~/css-loader!../~/sass-loader/lib/loader.js!./image-carousel.scss ***!
-  \****************************************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(/*! ./../~/css-loader/lib/css-base.js */ 565)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, ".img_container {\n  overflow: hidden;\n  width: 300px;\n  height: 300px;\n  margin: 0px 0px 5px 0px;\n  border-radius: 8px;\n  position: relative;\n  display: inline; }\n", ""]);
-	
-	// exports
-
-
-/***/ },
+/* 567 */,
+/* 568 */,
+/* 569 */,
 /* 570 */
 /*!*************************!*\
   !*** ./restaurant.scss ***!
